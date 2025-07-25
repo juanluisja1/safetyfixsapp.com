@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drop-Off Form</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the grab/grabbing cursor */
+        .cursor-grab { cursor: grab; }
+        .cursor-grabbing { cursor: grabbing; }
+
+        /* General font for the application */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Hide scrollbars for QuantitySpinner for a cleaner look */
+        .quantity-spinner-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        .quantity-spinner-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md md:max-w-lg lg:max-w-xl border border-gray-700">
+        <!-- Logo -->
+        <img
+            src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/0fe8f795-06e1-40c2-9771-2b4c502873e9/logo+.png?format=1500w"
+            alt="Company Logo"
+            class="mx-auto mb-6 max-h-24 object-contain rounded-md"
+            onerror="this.onerror=null; this.src='https://placehold.co/150x60/333333/FFFFFF?text=Logo';"
+        />
+
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-100 mb-6 text-center">Drop-Off Form</h2>
+        <form id="dropOffForm" class="space-y-4">
+
+            <!-- Customer Name with Autofill -->
+            <div class="relative">
+                <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">
+                    Customer Name
+                </label>
+                <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
+                    required
+                    autocomplete="off"
+                />
+                <ul id="customerSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+            </div>
+
+            <!-- Phone # -->
+            <div>
+                <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">
+                    Phone #
+                </label>
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm bg-gray-700 text-gray-200"
+                    required
+                    placeholder="e.g., 123-456-7890"
+                    maxlength="12"
+                />
+                <p id="phoneNumberError" class="mt-1 text-sm text-red-400 hidden"></p>
+            </div>
+
+            <!-- What will you drop off? -->
+            <div>
+                <label for="dropOffType" class="block text-sm font-medium text-gray-300 mb-1">
+                    What will you drop off?
+                </label>
+                <select
+                    id="dropOffType"
+                    name="dropOffType"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
+                    required
+                >
+                    <option value="">Select an option</option>
+                    <option value="vehicle">Vehicle</option>
+                    <option value="part">Part</option>
+                </select>
+            </div>
+
+            <!-- Conditional Fields for Vehicle -->
+            <div id="vehicleDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
+                <h3 class="text-lg font-semibold text-gray-200">Vehicle Details</h3>
+                <!-- QuantitySpinner for Year -->
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-300 w-1/2">Year</label>
+                    <div
+                        id="vehicleYearSpinner"
+                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
+                        data-value="2020"
+                        data-min="1991"
+                        data-max="2026"
+                    >
+                        2020
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                          <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                          <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Make with Autofill -->
+                <div class="relative">
+                    <label for="vehicleMake" class="block text-sm font-medium text-gray-300 mb-1">
+                        Make
+                    </label>
+                    <input
+                        type="text"
+                        id="vehicleMake"
+                        name="vehicleMake"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
+                        placeholder="e.g., Honda"
+                        autocomplete="off"
+                    />
+                    <ul id="makeSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+                </div>
+
+                <!-- Vehicle Model with Autofill -->
+                <div class="relative">
+                    <label for="vehicleModel" class="block text-sm font-medium text-gray-300 mb-1">
+                        Model
+                    </label>
+                    <input
+                        type="text"
+                        id="vehicleModel"
+                        name="vehicleModel"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
+                        placeholder="e.g., Civic"
+                        autocomplete="off"
+                        disabled
+                    />
+                    <ul id="modelSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+                </div>
+
+                <!-- Brief Description of Issue -->
+                <div>
+                    <label for="vehicleIssueDescription" class="block text-sm font-medium text-gray-300 mb-1">
+                        Brief Description of Issue
+                    </label>
+                    <textarea
+                        id="vehicleIssueDescription"
+                        name="vehicleIssueDescription"
+                        rows="3"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
+                        placeholder="e.g., Locked seatbelt, rh. etc..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Conditional Fields for Part -->
+            <div id="partDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
+                <h3 class="text-lg font-semibold text-gray-200">Part Details (Quantities)</h3>
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-300 w-1/2">Single Stage(s)</label>
+                    <div
+                        id="singleStageSpinner"
+                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
+                        data-value="0"
+                        data-min="0"
+                        data-max="20"
+                    >
+                        0
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-300 w-1/2">Dual Stage(s)</label>
+                    <div
+                        id="dualStageSpinner"
+                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
+                        data-value="0"
+                        data-min="0"
+                        data-max="20"
+                    >
+                        0
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-300 w-1/2">3 Stage(s)</label>
+                    <div
+                        id="threeStageSpinner"
+                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
+                        data-value="0"
+                        data-min="0"
+                        data-max="20"
+                    >
+                        0
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium text-gray-300 w-1/2">Buckle(s)</label>
+                    <div
+                        id="buckleSpinner"
+                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
+                        data-value="0"
+                        data-min="0"
+                        data-max="20"
+                    >
+                        0
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition duration-150 ease-in-out"
+            >
+                Submit
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // --- Mock Data ---
+        const mockClients = [
+            { name: 'Sencion Performance', phoneNumber: '8015138980' },
+            { name: 'Vip Auto', phoneNumber: '8019876543' },
+            { name: 'Gamma Industries', phoneNumber: '5551112222' },
+            { name: 'Delta Enterprises', phoneNumber: '5553334444' },
+            { name: 'Acme Auto Repair', phoneNumber: '5555550001' },
+            { name: 'Beta Parts Supply', phoneNumber: '5555550002' },
+        ];
+
+        const mockVehicles = {
+            makes: ['Honda', 'Toyota', 'Ford', 'Chevrolet', 'BMW', 'Mercedes-Benz', 'Audi', 'Nissan', 'Hyundai', 'Kia'],
+            models: {
+                'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
+                'Toyota': ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Tacoma'],
+                'Ford': ['F-150', 'Escape', 'Explorer', 'Mustang', 'Focus'],
+                'Chevrolet': ['Silverado', 'Equinox', 'Malibu', 'Tahoe', 'Corvette'],
+                'BMW': ['3 Series', '5 Series', 'X3', 'X5', 'M3'],
+                'Mercedes-Benz': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class'],
+                'Audi': ['A3', 'A4', 'Q5', 'Q7', 'R8'],
+                'Nissan': ['Altima', 'Rogue', 'Titan', 'Sentra', 'Pathfinder'],
+                'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona'],
+                'Kia': ['Forte', 'Optima', 'Sportage', 'Sorento', 'Telluride'],
+            }
+        };
+
+        // --- DOM Elements ---
+        const dropOffForm = document.getElementById('dropOffForm');
+        const customerNameInput = document.getElementById('customerName');
+        const customerSuggestionsList = document.getElementById('customerSuggestions');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const phoneNumberError = document.getElementById('phoneNumberError');
+        const dropOffTypeSelect = document.getElementById('dropOffType');
+        const vehicleDetailsDiv = document.getElementById('vehicleDetails');
+        const partDetailsDiv = document.getElementById('partDetails');
+        const vehicleYearSpinner = document.getElementById('vehicleYearSpinner');
+        const vehicleMakeInput = document.getElementById('vehicleMake');
+        const makeSuggestionsList = document.getElementById('makeSuggestions');
+        const vehicleModelInput = document.getElementById('vehicleModel');
+        const modelSuggestionsList = document.getElementById('modelSuggestions');
+        const vehicleIssueDescriptionTextarea = document.getElementById('vehicleIssueDescription');
+
+        const singleStageSpinner = document.getElementById('singleStageSpinner');
+        const dualStageSpinner = document.getElementById('dualStageSpinner');
+        const threeStageSpinner = document.getElementById('threeStageSpinner');
+        const buckleSpinner = document.getElementById('buckleSpinner');
+
+        // --- Global State / Form Data (simulating React state) ---
+        let formData = {
+            customerName: '',
+            phoneNumber: '',
+            dropOffType: '',
+            vehicleYear: 2020,
+            vehicleMake: '',
+            vehicleModel: '',
+            vehicleIssueDescription: '',
+            singleStage: 0,
+            dualStage: 0,
+            threeStage: 0,
+            buckle: 0,
+        };
+
+        let currentMakeModels = []; // To store models for selected make
+
+        // --- Helper Functions ---
+
+        /**
+         * Formats a raw phone number string into XXX-XXX-XXXX format.
+         * @param {string} value The raw phone number digits.
+         * @returns {string} The formatted phone number.
+         */
+        function formatPhoneNumber(value) {
+            if (!value) return value;
+            const phoneNumber = value.replace(/\D/g, ''); // Remove non-digits
+            const phoneNumberLength = phoneNumber.length;
+
+            if (phoneNumberLength < 4) return phoneNumber;
+            if (phoneNumberLength < 7) {
+                return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+            }
+            return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+        }
+
+        /**
+         * Validates a raw phone number string for 10 digits.
+         * @param {string} number The raw phone number digits.
+         * @returns {string} An error message if invalid, otherwise an empty string.
+         */
+        function validatePhoneNumber(number) {
+            const cleanedNumber = number.replace(/\D/g, ''); // Ensure validation on cleaned number
+            if (cleanedNumber.length === 0) {
+                return 'Phone number is required.';
+            }
+            if (cleanedNumber.length !== 10) {
+                return 'Phone number must be exactly 10 digits.';
+            }
+            if (!/^\d{10}$/.test(cleanedNumber)) {
+                return 'Phone number can only contain digits.';
+            }
+            return ''; // No error
+        }
+
+        // --- UI Update Functions ---
+
+        /**
+         * Updates the UI based on the dropOffType.
+         */
+        function updateConditionalFields() {
+            if (formData.dropOffType === 'vehicle') {
+                vehicleDetailsDiv.classList.remove('hidden');
+                partDetailsDiv.classList.add('hidden');
+                // Ensure required attributes are set/unset
+                vehicleMakeInput.required = true;
+                vehicleIssueDescriptionTextarea.required = true;
+            } else if (formData.dropOffType === 'part') {
+                partDetailsDiv.classList.remove('hidden');
+                vehicleDetailsDiv.classList.add('hidden');
+                // Ensure required attributes are set/unset
+                vehicleMakeInput.required = false;
+                vehicleIssueDescriptionTextarea.required = false;
+            } else {
+                vehicleDetailsDiv.classList.add('hidden');
+                partDetailsDiv.classList.add('hidden');
+                // Ensure required attributes are set/unset
+                vehicleMakeInput.required = false;
+                vehicleIssueDescriptionTextarea.required = false;
+            }
+        }
+
+        /**
+         * Updates a QuantitySpinner's displayed value and internal data-value.
+         * @param {HTMLElement} spinnerElement The DOM element of the spinner.
+         * @param {number} newValue The new value to set.
+         */
+        function updateSpinnerValue(spinnerElement, newValue) {
+            const min = parseInt(spinnerElement.dataset.min, 10);
+            const max = parseInt(spinnerElement.dataset.max, 10);
+            const clampedValue = Math.max(min, Math.min(max, newValue));
+
+            spinnerElement.textContent = clampedValue;
+            spinnerElement.dataset.value = clampedValue;
+
+            // Update global formData
+            const spinnerId = spinnerElement.id;
+            const fieldName = spinnerId.replace('Spinner', ''); // e.g., 'vehicleYear' from 'vehicleYearSpinner'
+            formData[fieldName] = clampedValue;
+
+            // Add back the buttons as textContent assignment removes them
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = "absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5";
+            buttonsDiv.innerHTML = `
+                <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+            `;
+            spinnerElement.appendChild(buttonsDiv);
+        }
+
+
+        /**
+         * Renders suggestions into a given UL element.
+         * @param {HTMLUListElement} ulElement The UL element to render into.
+         * @param {Array<string>|Array<object>} suggestions The array of suggestions.
+         * @param {Function} onClickHandler The function to call when a suggestion is clicked.
+         * @param {string} [displayKey] Optional key to display for object suggestions.
+         */
+        function renderSuggestions(ulElement, suggestions, onClickHandler, displayKey = '') {
+            ulElement.innerHTML = ''; // Clear previous suggestions
+            if (suggestions.length === 0) {
+                ulElement.classList.add('hidden');
+                return;
+            }
+
+            suggestions.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-600 rounded-md transition-colors duration-150 ease-in-out';
+                li.textContent = displayKey ? item[displayKey] : item;
+                // Use mousedown to prevent blur from hiding list before click fires
+                li.addEventListener('mousedown', (e) => {
+                    e.preventDefault(); // Prevent default focus loss
+                    onClickHandler(item);
+                });
+                ulElement.appendChild(li);
+            });
+            ulElement.classList.remove('hidden');
+        }
+
+        // --- Event Handlers ---
+
+        function handleInputChange(e) {
+            const { name, value, id } = e.target;
+
+            if (name === 'phoneNumber') {
+                const rawValue = value.replace(/\D/g, '');
+                const formattedValue = formatPhoneNumber(rawValue);
+                e.target.value = formattedValue; // Update input display immediately
+                formData.phoneNumber = formattedValue;
+                const error = validatePhoneNumber(rawValue);
+                phoneNumberError.textContent = error;
+                phoneNumberError.classList.toggle('hidden', !error);
+                e.target.classList.toggle('border-red-500', !!error);
+                e.target.classList.toggle('focus:ring-red-500', !!error);
+                e.target.classList.toggle('focus:border-red-500', !!error);
+                e.target.classList.toggle('border-gray-600', !error);
+                e.target.classList.toggle('focus:ring-orange-500', !error);
+                e.target.classList.toggle('focus:border-orange-500', !error);
+            } else {
+                formData[name] = value;
+            }
+
+            if (name === 'customerName') {
+                if (value.length > 1) {
+                    const filteredSuggestions = mockClients.filter(client =>
+                        client.name.toLowerCase().includes(value.toLowerCase())
+                    );
+                    renderSuggestions(customerSuggestionsList, filteredSuggestions, handleCustomerSuggestionClick, 'name');
+                } else {
+                    customerSuggestionsList.classList.add('hidden');
+                }
+            } else if (name === 'dropOffType') {
+                updateConditionalFields();
+                // Reset conditional fields when type changes
+                if (value === 'vehicle') {
+                    formData.singleStage = 0; formData.dualStage = 0; formData.threeStage = 0; formData.buckle = 0;
+                    updateSpinnerValue(singleStageSpinner, 0); updateSpinnerValue(dualStageSpinner, 0);
+                    updateSpinnerValue(threeStageSpinner, 0); updateSpinnerValue(buckleSpinner, 0);
+                } else if (value === 'part') {
+                    formData.vehicleYear = 2020; formData.vehicleMake = ''; formData.vehicleModel = ''; formData.vehicleIssueDescription = '';
+                    updateSpinnerValue(vehicleYearSpinner, 2020);
+                    vehicleMakeInput.value = ''; vehicleModelInput.value = ''; vehicleModelInput.disabled = true;
+                    makeSuggestionsList.classList.add('hidden'); modelSuggestionsList.classList.add('hidden');
+                }
+            } else if (name === 'vehicleMake') {
+                vehicleModelInput.disabled = !value; // Disable model if no make
+                formData.vehicleModel = ''; // Clear model when make changes
+                vehicleModelInput.value = '';
+                if (value.length > 0) {
+                    const filteredMakes = mockVehicles.makes.filter(make =>
+                        make.toLowerCase().includes(value.toLowerCase())
+                    );
+                    renderSuggestions(makeSuggestionsList, filteredMakes, handleMakeSuggestionClick);
+                } else {
+                    makeSuggestionsList.classList.add('hidden');
+                }
+                modelSuggestionsList.classList.add('hidden'); // Hide model suggestions when make changes
+            } else if (name === 'vehicleModel') {
+                if (formData.vehicleMake && value.length > 0) {
+                    const availableModels = mockVehicles.models[formData.vehicleMake] || [];
+                    const filteredModels = availableModels.filter(model =>
+                        model.toLowerCase().includes(value.toLowerCase())
+                    );
+                    renderSuggestions(modelSuggestionsList, filteredModels, handleModelSuggestionClick);
+                } else {
+                    modelSuggestionsList.classList.add('hidden');
+                }
+            }
+        }
+
+        function handleCustomerSuggestionClick(client) {
+            customerNameInput.value = client.name;
+            phoneNumberInput.value = formatPhoneNumber(client.phoneNumber);
+            formData.customerName = client.name;
+            formData.phoneNumber = formatPhoneNumber(client.phoneNumber); // Store formatted
+            customerSuggestionsList.classList.add('hidden');
+            // Re-validate auto-filled phone number
+            const error = validatePhoneNumber(client.phoneNumber);
+            phoneNumberError.textContent = error;
+            phoneNumberError.classList.toggle('hidden', !error);
+            phoneNumberInput.classList.toggle('border-red-500', !!error);
+            phoneNumberInput.classList.toggle('focus:ring-red-500', !!error);
+            phoneNumberInput.classList.toggle('focus:border-red-500', !!error);
+            phoneNumberInput.classList.toggle('border-gray-600', !error);
+            phoneNumberInput.classList.toggle('focus:ring-orange-500', !error);
+            phoneNumberInput.classList.toggle('focus:border-orange-500', !error);
+        }
+
+        function handleMakeSuggestionClick(make) {
+            vehicleMakeInput.value = make;
+            formData.vehicleMake = make;
+            vehicleModelInput.disabled = false;
+            formData.vehicleModel = ''; // Clear model when make changes
+            vehicleModelInput.value = '';
+            makeSuggestionsList.classList.add('hidden');
+            // Pre-populate model suggestions for the selected make
+            currentMakeModels = mockVehicles.models[make] || [];
+            renderSuggestions(modelSuggestionsList, currentMakeModels, handleModelSuggestionClick);
+            modelSuggestionsList.classList.remove('hidden'); // Ensure model suggestions are shown
+        }
+
+        function handleModelSuggestionClick(model) {
+            vehicleModelInput.value = model;
+            formData.vehicleModel = model;
+            modelSuggestionsList.classList.add('hidden');
+        }
+
+        // --- Quantity Spinner Logic ---
+        let isDragging = false;
+        let startY = 0;
+        let startValue = 0;
+        let currentSpinner = null;
+
+        function handleSpinnerMouseDown(e) {
+            const spinner = e.currentTarget;
+            if (e.target.tagName === 'BUTTON') return; // Don't drag if clicking buttons
+            isDragging = true;
+            startY = e.clientY;
+            startValue = parseInt(spinner.dataset.value, 10);
+            currentSpinner = spinner;
+            spinner.classList.add('cursor-grabbing');
+            e.preventDefault(); // Prevent text selection
+            window.addEventListener('mousemove', handleSpinnerMouseMove);
+            window.addEventListener('mouseup', handleSpinnerMouseUp);
+        }
+
+        function handleSpinnerMouseMove(e) {
+            if (!isDragging || !currentSpinner) return;
+            const diffY = startY - e.clientY;
+            const change = Math.floor(diffY / 20); // Sensitivity
+            const min = parseInt(currentSpinner.dataset.min, 10);
+            const max = parseInt(currentSpinner.dataset.max, 10);
+            let newValue = startValue + change;
+            newValue = Math.max(min, Math.min(max, newValue));
+
+            if (newValue !== parseInt(currentSpinner.dataset.value, 10)) {
+                updateSpinnerValue(currentSpinner, newValue);
+            }
+        }
+
+        function handleSpinnerMouseUp() {
+            isDragging = false;
+            if (currentSpinner) {
+                currentSpinner.classList.remove('cursor-grabbing');
+                currentSpinner = null;
+            }
+            window.removeEventListener('mousemove', handleSpinnerMouseMove);
+            window.removeEventListener('mouseup', handleSpinnerMouseUp);
+        }
+
+        function handleSpinnerTouchStart(e) {
+            const spinner = e.currentTarget;
+            if (e.target.tagName === 'BUTTON') return;
+            isDragging = true;
+            startY = e.touches[0].clientY;
+            startValue = parseInt(spinner.dataset.value, 10);
+            currentSpinner = spinner;
+            spinner.classList.add('cursor-grabbing');
+            e.preventDefault(); // Prevent scrolling
+        }
+
+        function handleSpinnerTouchMove(e) {
+            if (!isDragging || !currentSpinner) return;
+            const diffY = startY - e.touches[0].clientY;
+            const change = Math.floor(diffY / 20);
+            const min = parseInt(currentSpinner.dataset.min, 10);
+            const max = parseInt(currentSpinner.dataset.max, 10);
+            let newValue = startValue + change;
+            newValue = Math.max(min, Math.min(max, newValue));
+
+            if (newValue !== parseInt(currentSpinner.dataset.value, 10)) {
+                updateSpinnerValue(currentSpinner, newValue);
+            }
+        }
+
+        function handleSpinnerTouchEnd() {
+            isDragging = false;
+            if (currentSpinner) {
+                currentSpinner.classList.remove('cursor-grabbing');
+                currentSpinner = null;
+            }
+        }
+
+        function handleSpinnerButtonClick(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+            const spinner = e.currentTarget; // The spinner div itself
+            const action = button.dataset.action;
+            let currentValue = parseInt(spinner.dataset.value, 10);
+            const min = parseInt(spinner.dataset.min, 10);
+            const max = parseInt(spinner.dataset.max, 10);
+            let newValue = currentValue;
+
+            if (action === 'increment') {
+                newValue = Math.min(max, currentValue + 1);
+            } else if (action === 'decrement') {
+                newValue = Math.max(min, currentValue - 1);
+            }
+            updateSpinnerValue(spinner, newValue);
+            e.stopPropagation(); // Stop propagation to prevent drag from starting
+        }
+
+        // --- Event Listeners Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial UI setup
+            updateConditionalFields();
+
+            // Form element listeners
+            dropOffForm.addEventListener('input', handleInputChange);
+            dropOffForm.addEventListener('change', handleInputChange); // For select elements
+            phoneNumberInput.addEventListener('blur', () => {
+                const rawValue = phoneNumberInput.value.replace(/\D/g, '');
+                const error = validatePhoneNumber(rawValue);
+                phoneNumberError.textContent = error;
+                phoneNumberError.classList.toggle('hidden', !error);
+                phoneNumberInput.classList.toggle('border-red-500', !!error);
+                phoneNumberInput.classList.toggle('focus:ring-red-500', !!error);
+                phoneNumberInput.classList.toggle('focus:border-red-500', !!error);
+                phoneNumberInput.classList.toggle('border-gray-600', !error);
+                phoneNumberInput.classList.toggle('focus:ring-orange-500', !error);
+                phoneNumberInput.classList.toggle('focus:border-orange-500', !error);
+            });
+
+            // Customer Name Autofill listeners
+            customerNameInput.addEventListener('focus', () => customerSuggestionsList.classList.remove('hidden'));
+            customerNameInput.addEventListener('blur', () => setTimeout(() => customerSuggestionsList.classList.add('hidden'), 100));
+
+            // Vehicle Make Autofill listeners
+            vehicleMakeInput.addEventListener('focus', () => makeSuggestionsList.classList.remove('hidden'));
+            vehicleMakeInput.addEventListener('blur', () => setTimeout(() => makeSuggestionsList.classList.add('hidden'), 100));
+
+            // Vehicle Model Autofill listeners
+            vehicleModelInput.addEventListener('focus', () => modelSuggestionsList.classList.remove('hidden'));
+            vehicleModelInput.addEventListener('blur', () => setTimeout(() => modelSuggestionsList.classList.add('hidden'), 100));
+
+            // Attach spinner event listeners (delegation for buttons)
+            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner].forEach(spinner => {
+                if (spinner) {
+                    spinner.addEventListener('mousedown', handleSpinnerMouseDown);
+                    spinner.addEventListener('touchstart', handleSpinnerTouchStart);
+                    spinner.addEventListener('touchmove', handleSpinnerTouchMove);
+                    spinner.addEventListener('touchend', handleSpinnerTouchEnd);
+                    spinner.addEventListener('click', handleSpinnerButtonClick); // For button clicks inside spinner
+                }
+            });
+
+            // Form submission listener
+            dropOffForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const rawPhoneNumber = formData.phoneNumber.replace(/\D/g, '');
+                const phoneError = validatePhoneNumber(rawPhoneNumber);
+                phoneNumberError.textContent = phoneError;
+                phoneNumberError.classList.toggle('hidden', !phoneError);
+                phoneNumberInput.classList.toggle('border-red-500', !!phoneError);
+                phoneNumberInput.classList.toggle('focus:ring-red-500', !!phoneError);
+                phoneNumberInput.classList.toggle('focus:border-red-500', !!phoneError);
+                phoneNumberInput.classList.toggle('border-gray-600', !phoneError);
+                phoneNumberInput.classList.toggle('focus:ring-orange-500', !phoneError);
+                phoneNumberInput.classList.toggle('focus:border-orange-500', !phoneError);
+
+                if (phoneError) {
+                    alert('Please fix the errors in the form before submitting.');
+                    return;
+                }
+
+                // Check required fields for currently visible section
+                if (formData.dropOffType === 'vehicle') {
+                    if (!formData.vehicleMake || !formData.vehicleModel || !formData.vehicleIssueDescription) {
+                        alert('Please fill in all required vehicle details.');
+                        return;
+                    }
+                } else if (formData.dropOffType === 'part') {
+                    // No specific required fields for parts beyond quantity 0 allowed
+                } else {
+                     alert('Please select what you will drop off.');
+                     return;
+                }
+
+                console.log('Form Data Submitted:', formData);
+                alert('Form submitted successfully! Check console for data.');
+                // Here you would typically send formData to a server
+            });
+        });
+    </script>
+</body>
+</html>
