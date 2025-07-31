@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drop-Off Form</title>
-    <!-- Tailwind CSS CDN -->
+    <title>SafetyFixs - Professional Automotive Safety & Repair</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .swiper-button-next, .swiper-button-prev {
+            color: #F59E0B; /* amber-500 */
+        }
+        .swiper-pagination-bullet-active {
+            background: #F59E0B; /* amber-500 */
+        }
+        .hero-slide {
+            background-size: cover;
+            background-position: center;
+        }
         /* Custom styles for the grab/grabbing cursor */
         .cursor-grab { cursor: grab; }
         .cursor-grabbing { cursor: grabbing; }
 
-        /* General font for the application */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
         /* Hide scrollbars for QuantitySpinner for a cleaner look */
         .quantity-spinner-container {
             -ms-overflow-style: none; /* IE and Edge */
@@ -23,691 +34,712 @@
         .quantity-spinner-container::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera */
         }
+
+        /* Notification Styling */
+        #notification.show {
+            transform: translateX(0);
+        }
+        #notification.error {
+            background-color: #DC2626; /* red-600 */
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gray-900 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-    <div class="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md md:max-w-lg lg:max-w-xl border border-gray-700">
-        <!-- Logo -->
-        <img
-            src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/0fe8f795-06e1-40c2-9771-2b4c502873e9/logo+.png?format=1500w"
-            alt="Company Logo"
-            class="mx-auto mb-6 max-h-24 object-contain rounded-md"
-            onerror="this.onerror=null; this.src='https://placehold.co/150x60/333333/FFFFFF?text=Logo';"
-        />
+<body class="bg-gray-100 text-gray-800">
 
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-100 mb-6 text-center">Drop-Off Form</h2>
-        <form id="dropOffForm" class="space-y-4">
-
-            <!-- Customer Name with Autofill -->
-            <div class="relative">
-                <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">
-                    Customer Name
-                </label>
-                <input
-                    type="text"
-                    id="customerName"
-                    name="customerName"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
-                    required
-                    autocomplete="off"
-                />
-                <ul id="customerSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <a href="#home">
+                <img src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/0fe8f795-06e1-40c2-9771-2b4c502873e9/logo+.png?format=1500w" alt="SafetyFixs Logo" class="h-12 md:h-16">
+            </a>
+            <div class="hidden md:flex space-x-4 lg:space-x-6 items-center">
+                <a href="#home" class="text-gray-600 hover:text-amber-600 transition duration-300">Home</a>
+                <a href="#about" class="text-gray-600 hover:text-amber-600 transition duration-300">About Us</a>
+                <a href="#services" class="text-gray-600 hover:text-amber-600 transition duration-300">Services</a>
+                <a href="#contact" class="text-gray-600 hover:text-amber-600 transition duration-300">Contact</a>
+                <a href="#dropoff" class="bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600 transition duration-300 whitespace-nowrap">Drop Off Form</a>
             </div>
-
-            <!-- Phone # -->
-            <div>
-                <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">
-                    Phone #
-                </label>
-                <input
-                    type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm bg-gray-700 text-gray-200"
-                    required
-                    placeholder="e.g., 123-456-7890"
-                    maxlength="12"
-                />
-                <p id="phoneNumberError" class="mt-1 text-sm text-red-400 hidden"></p>
-            </div>
-
-            <!-- What will you drop off? -->
-            <div>
-                <label for="dropOffType" class="block text-sm font-medium text-gray-300 mb-1">
-                    What will you drop off?
-                </label>
-                <select
-                    id="dropOffType"
-                    name="dropOffType"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
-                    required
-                >
-                    <option value="">Select an option</option>
-                    <option value="vehicle">Vehicle</option>
-                    <option value="part">Part</option>
-                </select>
-            </div>
-
-            <!-- Conditional Fields for Vehicle -->
-            <div id="vehicleDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
-                <h3 class="text-lg font-semibold text-gray-200">Vehicle Details</h3>
-                <!-- QuantitySpinner for Year -->
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-300 w-1/2">Year</label>
-                    <div
-                        id="vehicleYearSpinner"
-                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
-                        data-value="2020"
-                        data-min="1991"
-                        data-max="2026"
-                    >
-                        2020
-                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                          <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                          <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vehicle Make with Autofill -->
-                <div class="relative">
-                    <label for="vehicleMake" class="block text-sm font-medium text-gray-300 mb-1">
-                        Make
-                    </label>
-                    <input
-                        type="text"
-                        id="vehicleMake"
-                        name="vehicleMake"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
-                        placeholder="e.g., Honda"
-                        autocomplete="off"
-                    />
-                    <ul id="makeSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
-                </div>
-
-                <!-- Vehicle Model with Autofill -->
-                <div class="relative">
-                    <label for="vehicleModel" class="block text-sm font-medium text-gray-300 mb-1">
-                        Model
-                    </label>
-                    <input
-                        type="text"
-                        id="vehicleModel"
-                        name="vehicleModel"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
-                        placeholder="e.g., Civic"
-                        autocomplete="off"
-                        disabled
-                    />
-                    <ul id="modelSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
-                </div>
-
-                <!-- Brief Description of Issue -->
-                <div>
-                    <label for="vehicleIssueDescription" class="block text-sm font-medium text-gray-300 mb-1">
-                        Brief Description of Issue
-                    </label>
-                    <textarea
-                        id="vehicleIssueDescription"
-                        name="vehicleIssueDescription"
-                        rows="3"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"
-                        placeholder="e.g., Locked seatbelt, rh. etc..."
-                    ></textarea>
-                </div>
-            </div>
-
-            <!-- Conditional Fields for Part -->
-            <div id="partDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
-                <h3 class="text-lg font-semibold text-gray-200">Part Details (Quantities)</h3>
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-300 w-1/2">Single Stage(s)</label>
-                    <div
-                        id="singleStageSpinner"
-                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
-                        data-value="0"
-                        data-min="0"
-                        data-max="20"
-                    >
-                        0
-                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-300 w-1/2">Dual Stage(s)</label>
-                    <div
-                        id="dualStageSpinner"
-                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
-                        data-value="0"
-                        data-min="0"
-                        data-max="20"
-                    >
-                        0
-                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-300 w-1/2">3 Stage(s)</label>
-                    <div
-                        id="threeStageSpinner"
-                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
-                        data-value="0"
-                        data-min="0"
-                        data-max="20"
-                    >
-                        0
-                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <label class="block text-sm font-medium text-gray-300 w-1/2">Buckle(s)</label>
-                    <div
-                        id="buckleSpinner"
-                        class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container"
-                        data-value="0"
-                        data-min="0"
-                        data-max="20"
-                    >
-                        0
-                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                            <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button
-                type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition duration-150 ease-in-out"
-            >
-                Submit
+            <button id="mobile-menu-button" class="md:hidden flex items-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
-        </form>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#home" class="block py-2 px-4 text-sm hover:bg-gray-200">Home</a>
+            <a href="#about" class="block py-2 px-4 text-sm hover:bg-gray-200">About Us</a>
+            <a href="#services" class="block py-2 px-4 text-sm hover:bg-gray-200">Services</a>
+            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-gray-200">Contact</a>
+            <a href="#dropoff" class="block py-2 px-4 text-sm bg-amber-500 text-white">Drop Off Form</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative h-[70vh] w-full">
+             <div class="swiper-container hero-swiper h-full">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://blog.beforward.jp/wp-content/uploads/2015/02/p22-car-design-safety-7-638-1.jpg');"></div>
+                    <div class="swiper-slide hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.gotodobbs.com/wp-content/uploads/2025/06/top-6-car-safety-features.jpeg.webp');"></div>
+                    <div class="swiper-slide hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8PBN-KFJKIRx34RI5K2xYREg6sKfyA95vhA&s');"></div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-center text-white z-10 p-4 pointer-events-none">
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">Expert Care for Your Vehicle's Safety</h1>
+                    <p class="text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto">From ADAS calibration to module programming, we ensure your car's safety systems are flawless.</p>
+                    <a href="#services" class="bg-amber-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition duration-300 pointer-events-auto">Explore Our Services</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-12 md:py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">About SafetyFixs</h2>
+                <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div class="md:w-1/2">
+                        <img src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/a4d1483c-f74d-4c09-a11e-bb44c2e7721e/2024-01-09.jpg?format=2500w" alt="Our Workshop" class="rounded-lg shadow-lg" onerror="this.onerror=null; this.src='https://placehold.co/600x400/E2E8F0/334155?text=Our+Workshop';">
+                    </div>
+                    <div class="md:w-1/2">
+                        <p class="mb-4">SafetyFixs was born from a passion for automotive technology and a commitment to driver safety. Our certified technicians specialize in the intricate systems that keep modern vehicles safe.</p>
+                        <p class="mb-4">We use state-of-the-art equipment to diagnose, repair, and calibrate Advanced Driver-Assistance Systems (ADAS), ensuring every feature functions as intended by the manufacturer.</p>
+                        <p>Trust us to be your partner in maintaining the long-term safety and reliability of your vehicle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Slider Section -->
+        <section id="services" class="py-12 md:py-20">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+                <div class="swiper-container services-swiper relative pb-12">
+                    <div class="swiper-wrapper">
+                        <!-- Slide 1 -->
+                        <div class="swiper-slide bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                            <img src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/d7570233-616a-4c7f-92ba-b6b26fb051e9/image3.2.jpeg?format=1500w" alt="Airbag Repair" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/400x200/cccccc/333333?text=Airbag+Repair';">
+                            <div class="p-6 flex-grow">
+                                <h3 class="font-bold text-xl mb-4">Airbag Repair</h3>
+                                <p>Complete airbag system diagnostics and replacement of deployed airbags to restore your vehicle's safety features.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="swiper-slide bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                            <img src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/eddcf3fd-8569-4c33-8dde-6a063f94557a/image5.2.jpeg?format=1500w" alt="SRS Module Service" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/400x200/cccccc/333333?text=SRS+Service';">
+                            <div class="p-6 flex-grow">
+                                <h3 class="font-bold text-xl mb-4">SRS Module Reset</h3>
+                                <p>Expert service for the Supplemental Restraint System, including resetting modules after a collision.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="swiper-slide bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                            <img src="https://images.squarespace-cdn.com/content/v1/6642e66aeaeff72f1adc408c/c445f2b8-a85a-47d9-8949-20c45efbfc74/image2.2.jpeg?format=1500w" alt="Seatbelt Repair" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/400x200/cccccc/333333?text=Seatbelt+Repair';">
+                            <div class="p-6 flex-grow">
+                                <h3 class="font-bold text-xl mb-4">Seatbelt Repair & Replace</h3>
+                                <p>Repair of locked or damaged seatbelt retractors and pretensioners, a critical step for post-accident safety.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 4 -->
+                        <div class="swiper-slide bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                            <img src="https://placehold.co/400x200/E2E8F0/334155?text=ADAS+Calibration" alt="ADAS Calibration" class="w-full h-48 object-cover">
+                            <div class="p-6 flex-grow">
+                                <h3 class="font-bold text-xl mb-4">ADAS Calibration</h3>
+                                <p>Precise calibration of cameras and sensors for lane-keep assist, adaptive cruise control, and more.</p>
+                            </div>
+                        </div>
+                         <!-- Slide 5 -->
+                        <div class="swiper-slide bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                            <img src="https://placehold.co/400x200/E2E8F0/334155?text=Module+Programming" alt="Module Programming" class="w-full h-48 object-cover">
+                            <div class="p-6 flex-grow">
+                                <h3 class="font-bold text-xl mb-4">Module Programming</h3>
+                                <p>ECU, BCM, and other control module flashing, programming, and configuration for proper system communication.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Add Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Drop Off Form Section -->
+        <section id="dropoff" class="py-12 md:py-20 bg-gray-900">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-white">Drop Off Form</h2>
+                <div class="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-4xl mx-auto border border-gray-700">
+                    <form id="dropOffForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Customer Name with Autofill -->
+                            <div class="relative">
+                                <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">Customer Name</label>
+                                <input type="text" id="customerName" name="customerName" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required autocomplete="off" />
+                                <ul id="customerNameSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+                            </div>
+
+                            <!-- Phone # -->
+                            <div>
+                                <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">Phone #</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required placeholder="e.g., 801-123-4567" maxlength="12" />
+                                <p id="phoneNumberError" class="mt-1 text-sm text-red-400 hidden"></p>
+                            </div>
+                        </div>
+
+                        <!-- What will you drop off? -->
+                        <div>
+                            <label for="dropOffType" class="block text-sm font-medium text-gray-300 mb-1">What will you drop off?</label>
+                            <select id="dropOffType" name="dropOffType" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required>
+                                <option value="">Select an option</option>
+                                <option value="vehicle">Vehicle</option>
+                                <option value="part">Part</option>
+                            </select>
+                        </div>
+
+                        <!-- Conditional Fields for Vehicle -->
+                        <div id="vehicleDetails" class="space-y-6 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
+                            <h3 class="text-lg font-semibold text-gray-200">Vehicle Details</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">Year</label>
+                                    <div id="vehicleYearSpinner" class="relative w-full flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="2020" data-min="1991" data-max="2026">2020</div>
+                                </div>
+                                <div class="relative">
+                                    <label for="vehicleMake" class="block text-sm font-medium text-gray-300 mb-1">Make</label>
+                                    <input type="text" id="vehicleMake" name="vehicleMake" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Honda" autocomplete="off" />
+                                    <ul id="vehicleMakeSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+                                </div>
+                                <div class="relative">
+                                    <label for="vehicleModel" class="block text-sm font-medium text-gray-300 mb-1">Model</label>
+                                    <input type="text" id="vehicleModel" name="vehicleModel" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Civic" autocomplete="off" disabled />
+                                    <ul id="vehicleModelSuggestions" class="absolute z-10 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-3">
+                                <label for="vehicleIssueDescription" class="block text-sm font-medium text-gray-300 mb-1">Brief Description of Issue</label>
+                                <textarea id="vehicleIssueDescription" name="vehicleIssueDescription" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Locked seatbelt, rh. etc..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Conditional Fields for Part -->
+                        <div id="partDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
+                            <h3 class="text-lg font-semibold text-gray-200">Part Details (Quantities)</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300 w-1/2">Single Stage(s)</label><div id="singleStageSpinner" class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300 w-1/2">Dual Stage(s)</label><div id="dualStageSpinner" class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300 w-1/2">3 Stage(s)</label><div id="threeStageSpinner" class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300 w-1/2">Buckle(s)</label><div id="buckleSpinner" class="relative w-1/2 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition duration-150 ease-in-out">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="py-12 md:py-20 bg-gray-800 text-white">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
+                <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
+                <p class="mb-2">Phone: (801) 472-1909</p>
+                <p class="mb-2">Email: contact@safetyfixs.com</p>
+                <p>Address: 92 N 1200 W, Orem, Utah 84057</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
+            <div class="flex justify-center mb-4">
+                <a href="https://www.instagram.com/safetyfixmodule/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.315 2c-4.04.004-4.503.018-6.08.087C4.601 2.157 3.63 2.383 2.913 3.1c-.717.717-.943 1.688-1.012 3.218C1.833 7.897 1.82 8.356 1.818 12.315c-.003 4.04.01 4.504.079 6.08.07 1.53.295 2.5.988 3.193.717.717 1.688.943 3.218 1.012 1.578.068 2.04.082 6.08.078 4.04-.004 4.503-.018 6.08-.087 1.53-.07 2.5-.295 3.193-.988.717-.717.943-1.688 1.012-3.218.068-1.577.082-2.04.078-6.08-.004-4.04-.018-4.503-.087-6.08-.07-1.53-.295-2.5-.988-3.193-.717-.717-1.688-.943-3.218-1.012C16.818 2.018 16.36 2.004 12.315 2zm0 1.802c3.96 0 4.38.015 5.91.082.996.045 1.504.248 1.857.594.4.4.602.91.648 1.857.067 1.53.08 1.95.08 5.91s-.013 4.38-.08 5.91c-.046.948-.248 1.456-.648 1.857-.4.4-.91.602-1.857.648-1.53.067-1.95.08-5.91.08s-4.38-.013-5.91-.08c-.948-.046-1.456-.248-1.857-.648-.4-.4-.602-.91-.648-1.857-.067-1.53-.08-1.95-.08-5.91s.013-4.38.08-5.91c.046-.948.248-1.456.648-1.857.353-.346.86-.55 1.857-.594C7.935 3.817 8.355 3.802 12.315 3.802zM12 7.38a4.62 4.62 0 100 9.24 4.62 4.62 0 000-9.24zm0 7.438a2.818 2.818 0 110-5.636 2.818 2.818 0 010 5.636zm6.405-7.84a1.08 1.08 0 100-2.16 1.08 1.08 0 000 2.16z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+            <p>&copy; 2025 SafetyFixs. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Notification Element -->
+    <div id="notification" class="fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 ease-in-out">
+        <p id="notification-message"></p>
     </div>
 
     <script>
-        // --- Mock Data ---
-        const mockClients = [
-            { name: 'Sencion Performance', phoneNumber: '8015138980' },
-            { name: 'Vip Auto', phoneNumber: '8019876543' },
-            { name: 'Gamma Industries', phoneNumber: '5551112222' },
-            { name: 'Delta Enterprises', phoneNumber: '5553334444' },
-            { name: 'Acme Auto Repair', phoneNumber: '5555550001' },
-            { name: 'Beta Parts Supply', phoneNumber: '5555550002' },
-        ];
+        // --- START: Original Site Script ---
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-        const mockVehicles = {
-            makes: ['Honda', 'Toyota', 'Ford', 'Chevrolet', 'BMW', 'Mercedes-Benz', 'Audi', 'Nissan', 'Hyundai', 'Kia'],
-            models: {
-                'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
-                'Toyota': ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Tacoma'],
-                'Ford': ['F-150', 'Escape', 'Explorer', 'Mustang', 'Focus'],
-                'Chevrolet': ['Silverado', 'Equinox', 'Malibu', 'Tahoe', 'Corvette'],
-                'BMW': ['3 Series', '5 Series', 'X3', 'X5', 'M3'],
-                'Mercedes-Benz': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class'],
-                'Audi': ['A3', 'A4', 'Q5', 'Q7', 'R8'],
-                'Nissan': ['Altima', 'Rogue', 'Titan', 'Sentra', 'Pathfinder'],
-                'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona'],
-                'Kia': ['Forte', 'Optima', 'Sportage', 'Sorento', 'Telluride'],
+        // Initialize Swiper for services slider
+        var servicesSwiper = new Swiper('.services-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            pagination: {
+                el: '.services-swiper .swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.services-swiper .swiper-button-next',
+                prevEl: '.services-swiper .swiper-button-prev',
+            },
+            breakpoints: {
+                768: { slidesPerView: 2, spaceBetween: 40 },
+                1024: { slidesPerView: 3, spaceBetween: 50 }
             }
-        };
+        });
+        
+        // Initialize Swiper for hero slider
+        var heroSwiper = new Swiper('.hero-swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            effect: 'fade',
+            navigation: {
+                nextEl: '.hero-swiper .swiper-button-next',
+                prevEl: '.hero-swiper .swiper-button-prev',
+            },
+            pagination: {
+                el: '.hero-swiper .swiper-pagination',
+                clickable: true,
+            },
+        });
 
-        // --- DOM Elements ---
-        const dropOffForm = document.getElementById('dropOffForm');
-        const customerNameInput = document.getElementById('customerName');
-        const customerSuggestionsList = document.getElementById('customerSuggestions');
-        const phoneNumberInput = document.getElementById('phoneNumber');
-        const phoneNumberError = document.getElementById('phoneNumberError');
-        const dropOffTypeSelect = document.getElementById('dropOffType');
-        const vehicleDetailsDiv = document.getElementById('vehicleDetails');
-        const partDetailsDiv = document.getElementById('partDetails');
-        const vehicleYearSpinner = document.getElementById('vehicleYearSpinner');
-        const vehicleMakeInput = document.getElementById('vehicleMake');
-        const makeSuggestionsList = document.getElementById('makeSuggestions');
-        const vehicleModelInput = document.getElementById('vehicleModel');
-        const modelSuggestionsList = document.getElementById('modelSuggestions');
-        const vehicleIssueDescriptionTextarea = document.getElementById('vehicleIssueDescription');
-
-        const singleStageSpinner = document.getElementById('singleStageSpinner');
-        const dualStageSpinner = document.getElementById('dualStageSpinner');
-        const threeStageSpinner = document.getElementById('threeStageSpinner');
-        const buckleSpinner = document.getElementById('buckleSpinner');
-
-        // --- Global State / Form Data (simulating React state) ---
-        let formData = {
-            customerName: '',
-            phoneNumber: '',
-            dropOffType: '',
-            vehicleYear: 2020,
-            vehicleMake: '',
-            vehicleModel: '',
-            vehicleIssueDescription: '',
-            singleStage: 0,
-            dualStage: 0,
-            threeStage: 0,
-            buckle: 0,
-        };
-
-        let currentMakeModels = []; // To store models for selected make
-
-        // --- Helper Functions ---
-
-        /**
-         * Formats a raw phone number string into XXX-XXX-XXXX format.
-         * @param {string} value The raw phone number digits.
-         * @returns {string} The formatted phone number.
-         */
-        function formatPhoneNumber(value) {
-            if (!value) return value;
-            const phoneNumber = value.replace(/\D/g, ''); // Remove non-digits
-            const phoneNumberLength = phoneNumber.length;
-
-            if (phoneNumberLength < 4) return phoneNumber;
-            if (phoneNumberLength < 7) {
-                return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
-            }
-            return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-        }
-
-        /**
-         * Validates a raw phone number string for 10 digits.
-         * @param {string} number The raw phone number digits.
-         * @returns {string} An error message if invalid, otherwise an empty string.
-         */
-        function validatePhoneNumber(number) {
-            const cleanedNumber = number.replace(/\D/g, ''); // Ensure validation on cleaned number
-            if (cleanedNumber.length === 0) {
-                return 'Phone number is required.';
-            }
-            if (cleanedNumber.length !== 10) {
-                return 'Phone number must be exactly 10 digits.';
-            }
-            if (!/^\d{10}$/.test(cleanedNumber)) {
-                return 'Phone number can only contain digits.';
-            }
-            return ''; // No error
-        }
-
-        // --- UI Update Functions ---
-
-        /**
-         * Updates the UI based on the dropOffType.
-         */
-        function updateConditionalFields() {
-            if (formData.dropOffType === 'vehicle') {
-                vehicleDetailsDiv.classList.remove('hidden');
-                partDetailsDiv.classList.add('hidden');
-                // Ensure required attributes are set/unset
-                vehicleMakeInput.required = true;
-                vehicleIssueDescriptionTextarea.required = true;
-            } else if (formData.dropOffType === 'part') {
-                partDetailsDiv.classList.remove('hidden');
-                vehicleDetailsDiv.classList.add('hidden');
-                // Ensure required attributes are set/unset
-                vehicleMakeInput.required = false;
-                vehicleIssueDescriptionTextarea.required = false;
-            } else {
-                vehicleDetailsDiv.classList.add('hidden');
-                partDetailsDiv.classList.add('hidden');
-                // Ensure required attributes are set/unset
-                vehicleMakeInput.required = false;
-                vehicleIssueDescriptionTextarea.required = false;
-            }
-        }
-
-        /**
-         * Updates a QuantitySpinner's displayed value and internal data-value.
-         * @param {HTMLElement} spinnerElement The DOM element of the spinner.
-         * @param {number} newValue The new value to set.
-         */
-        function updateSpinnerValue(spinnerElement, newValue) {
-            const min = parseInt(spinnerElement.dataset.min, 10);
-            const max = parseInt(spinnerElement.dataset.max, 10);
-            const clampedValue = Math.max(min, Math.min(max, newValue));
-
-            spinnerElement.textContent = clampedValue;
-            spinnerElement.dataset.value = clampedValue;
-
-            // Update global formData
-            const spinnerId = spinnerElement.id;
-            const fieldName = spinnerId.replace('Spinner', ''); // e.g., 'vehicleYear' from 'vehicleYearSpinner'
-            formData[fieldName] = clampedValue;
-
-            // Add back the buttons as textContent assignment removes them
-            const buttonsDiv = document.createElement('div');
-            buttonsDiv.className = "absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5";
-            buttonsDiv.innerHTML = `
-                <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-            `;
-            spinnerElement.appendChild(buttonsDiv);
-        }
-
-
-        /**
-         * Renders suggestions into a given UL element.
-         * @param {HTMLUListElement} ulElement The UL element to render into.
-         * @param {Array<string>|Array<object>} suggestions The array of suggestions.
-         * @param {Function} onClickHandler The function to call when a suggestion is clicked.
-         * @param {string} [displayKey] Optional key to display for object suggestions.
-         */
-        function renderSuggestions(ulElement, suggestions, onClickHandler, displayKey = '') {
-            ulElement.innerHTML = ''; // Clear previous suggestions
-            if (suggestions.length === 0) {
-                ulElement.classList.add('hidden');
-                return;
-            }
-
-            suggestions.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-600 rounded-md transition-colors duration-150 ease-in-out';
-                li.textContent = displayKey ? item[displayKey] : item;
-                // Use mousedown to prevent blur from hiding list before click fires
-                li.addEventListener('mousedown', (e) => {
-                    e.preventDefault(); // Prevent default focus loss
-                    onClickHandler(item);
-                });
-                ulElement.appendChild(li);
-            });
-            ulElement.classList.remove('hidden');
-        }
-
-        // --- Event Handlers ---
-
-        function handleInputChange(e) {
-            const { name, value, id } = e.target;
-
-            if (name === 'phoneNumber') {
-                const rawValue = value.replace(/\D/g, '');
-                const formattedValue = formatPhoneNumber(rawValue);
-                e.target.value = formattedValue; // Update input display immediately
-                formData.phoneNumber = formattedValue;
-                const error = validatePhoneNumber(rawValue);
-                phoneNumberError.textContent = error;
-                phoneNumberError.classList.toggle('hidden', !error);
-                e.target.classList.toggle('border-red-500', !!error);
-                e.target.classList.toggle('focus:ring-red-500', !!error);
-                e.target.classList.toggle('focus:border-red-500', !!error);
-                e.target.classList.toggle('border-gray-600', !error);
-                e.target.classList.toggle('focus:ring-orange-500', !error);
-                e.target.classList.toggle('focus:border-orange-500', !error);
-            } else {
-                formData[name] = value;
-            }
-
-            if (name === 'customerName') {
-                if (value.length > 1) {
-                    const filteredSuggestions = mockClients.filter(client =>
-                        client.name.toLowerCase().includes(value.toLowerCase())
-                    );
-                    renderSuggestions(customerSuggestionsList, filteredSuggestions, handleCustomerSuggestionClick, 'name');
-                } else {
-                    customerSuggestionsList.classList.add('hidden');
-                }
-            } else if (name === 'dropOffType') {
-                updateConditionalFields();
-                // Reset conditional fields when type changes
-                if (value === 'vehicle') {
-                    formData.singleStage = 0; formData.dualStage = 0; formData.threeStage = 0; formData.buckle = 0;
-                    updateSpinnerValue(singleStageSpinner, 0); updateSpinnerValue(dualStageSpinner, 0);
-                    updateSpinnerValue(threeStageSpinner, 0); updateSpinnerValue(buckleSpinner, 0);
-                } else if (value === 'part') {
-                    formData.vehicleYear = 2020; formData.vehicleMake = ''; formData.vehicleModel = ''; formData.vehicleIssueDescription = '';
-                    updateSpinnerValue(vehicleYearSpinner, 2020);
-                    vehicleMakeInput.value = ''; vehicleModelInput.value = ''; vehicleModelInput.disabled = true;
-                    makeSuggestionsList.classList.add('hidden'); modelSuggestionsList.classList.add('hidden');
-                }
-            } else if (name === 'vehicleMake') {
-                vehicleModelInput.disabled = !value; // Disable model if no make
-                formData.vehicleModel = ''; // Clear model when make changes
-                vehicleModelInput.value = '';
-                if (value.length > 0) {
-                    const filteredMakes = mockVehicles.makes.filter(make =>
-                        make.toLowerCase().includes(value.toLowerCase())
-                    );
-                    renderSuggestions(makeSuggestionsList, filteredMakes, handleMakeSuggestionClick);
-                } else {
-                    makeSuggestionsList.classList.add('hidden');
-                }
-                modelSuggestionsList.classList.add('hidden'); // Hide model suggestions when make changes
-            } else if (name === 'vehicleModel') {
-                if (formData.vehicleMake && value.length > 0) {
-                    const availableModels = mockVehicles.models[formData.vehicleMake] || [];
-                    const filteredModels = availableModels.filter(model =>
-                        model.toLowerCase().includes(value.toLowerCase())
-                    );
-                    renderSuggestions(modelSuggestionsList, filteredModels, handleModelSuggestionClick);
-                } else {
-                    modelSuggestionsList.classList.add('hidden');
-                }
-            }
-        }
-
-        function handleCustomerSuggestionClick(client) {
-            customerNameInput.value = client.name;
-            phoneNumberInput.value = formatPhoneNumber(client.phoneNumber);
-            formData.customerName = client.name;
-            formData.phoneNumber = formatPhoneNumber(client.phoneNumber); // Store formatted
-            customerSuggestionsList.classList.add('hidden');
-            // Re-validate auto-filled phone number
-            const error = validatePhoneNumber(client.phoneNumber);
-            phoneNumberError.textContent = error;
-            phoneNumberError.classList.toggle('hidden', !error);
-            phoneNumberInput.classList.toggle('border-red-500', !!error);
-            phoneNumberInput.classList.toggle('focus:ring-red-500', !!error);
-            phoneNumberInput.classList.toggle('focus:border-red-500', !!error);
-            phoneNumberInput.classList.toggle('border-gray-600', !error);
-            phoneNumberInput.classList.toggle('focus:ring-orange-500', !error);
-            phoneNumberInput.classList.toggle('focus:border-orange-500', !error);
-        }
-
-        function handleMakeSuggestionClick(make) {
-            vehicleMakeInput.value = make;
-            formData.vehicleMake = make;
-            vehicleModelInput.disabled = false;
-            formData.vehicleModel = ''; // Clear model when make changes
-            vehicleModelInput.value = '';
-            makeSuggestionsList.classList.add('hidden');
-            // Pre-populate model suggestions for the selected make
-            currentMakeModels = mockVehicles.models[make] || [];
-            renderSuggestions(modelSuggestionsList, currentMakeModels, handleModelSuggestionClick);
-            modelSuggestionsList.classList.remove('hidden'); // Ensure model suggestions are shown
-        }
-
-        function handleModelSuggestionClick(model) {
-            vehicleModelInput.value = model;
-            formData.vehicleModel = model;
-            modelSuggestionsList.classList.add('hidden');
-        }
-
-        // --- Quantity Spinner Logic ---
-        let isDragging = false;
-        let startY = 0;
-        let startValue = 0;
-        let currentSpinner = null;
-
-        function handleSpinnerMouseDown(e) {
-            const spinner = e.currentTarget;
-            if (e.target.tagName === 'BUTTON') return; // Don't drag if clicking buttons
-            isDragging = true;
-            startY = e.clientY;
-            startValue = parseInt(spinner.dataset.value, 10);
-            currentSpinner = spinner;
-            spinner.classList.add('cursor-grabbing');
-            e.preventDefault(); // Prevent text selection
-            window.addEventListener('mousemove', handleSpinnerMouseMove);
-            window.addEventListener('mouseup', handleSpinnerMouseUp);
-        }
-
-        function handleSpinnerMouseMove(e) {
-            if (!isDragging || !currentSpinner) return;
-            const diffY = startY - e.clientY;
-            const change = Math.floor(diffY / 20); // Sensitivity
-            const min = parseInt(currentSpinner.dataset.min, 10);
-            const max = parseInt(currentSpinner.dataset.max, 10);
-            let newValue = startValue + change;
-            newValue = Math.max(min, Math.min(max, newValue));
-
-            if (newValue !== parseInt(currentSpinner.dataset.value, 10)) {
-                updateSpinnerValue(currentSpinner, newValue);
-            }
-        }
-
-        function handleSpinnerMouseUp() {
-            isDragging = false;
-            if (currentSpinner) {
-                currentSpinner.classList.remove('cursor-grabbing');
-                currentSpinner = null;
-            }
-            window.removeEventListener('mousemove', handleSpinnerMouseMove);
-            window.removeEventListener('mouseup', handleSpinnerMouseUp);
-        }
-
-        function handleSpinnerTouchStart(e) {
-            const spinner = e.currentTarget;
-            if (e.target.tagName === 'BUTTON') return;
-            isDragging = true;
-            startY = e.touches[0].clientY;
-            startValue = parseInt(spinner.dataset.value, 10);
-            currentSpinner = spinner;
-            spinner.classList.add('cursor-grabbing');
-            e.preventDefault(); // Prevent scrolling
-        }
-
-        function handleSpinnerTouchMove(e) {
-            if (!isDragging || !currentSpinner) return;
-            const diffY = startY - e.touches[0].clientY;
-            const change = Math.floor(diffY / 20);
-            const min = parseInt(currentSpinner.dataset.min, 10);
-            const max = parseInt(currentSpinner.dataset.max, 10);
-            let newValue = startValue + change;
-            newValue = Math.max(min, Math.min(max, newValue));
-
-            if (newValue !== parseInt(currentSpinner.dataset.value, 10)) {
-                updateSpinnerValue(currentSpinner, newValue);
-            }
-        }
-
-        function handleSpinnerTouchEnd() {
-            isDragging = false;
-            if (currentSpinner) {
-                currentSpinner.classList.remove('cursor-grabbing');
-                currentSpinner = null;
-            }
-        }
-
-        function handleSpinnerButtonClick(e) {
-            const button = e.target.closest('button');
-            if (!button) return;
-            const spinner = e.currentTarget; // The spinner div itself
-            const action = button.dataset.action;
-            let currentValue = parseInt(spinner.dataset.value, 10);
-            const min = parseInt(spinner.dataset.min, 10);
-            const max = parseInt(spinner.dataset.max, 10);
-            let newValue = currentValue;
-
-            if (action === 'increment') {
-                newValue = Math.min(max, currentValue + 1);
-            } else if (action === 'decrement') {
-                newValue = Math.max(min, currentValue - 1);
-            }
-            updateSpinnerValue(spinner, newValue);
-            e.stopPropagation(); // Stop propagation to prevent drag from starting
-        }
-
-        // --- Event Listeners Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initial UI setup
-            updateConditionalFields();
-
-            // Form element listeners
-            dropOffForm.addEventListener('input', handleInputChange);
-            dropOffForm.addEventListener('change', handleInputChange); // For select elements
-            phoneNumberInput.addEventListener('blur', () => {
-                const rawValue = phoneNumberInput.value.replace(/\D/g, '');
-                const error = validatePhoneNumber(rawValue);
-                phoneNumberError.textContent = error;
-                phoneNumberError.classList.toggle('hidden', !error);
-                phoneNumberInput.classList.toggle('border-red-500', !!error);
-                phoneNumberInput.classList.toggle('focus:ring-red-500', !!error);
-                phoneNumberInput.classList.toggle('focus:border-red-500', !!error);
-                phoneNumberInput.classList.toggle('border-gray-600', !error);
-                phoneNumberInput.classList.toggle('focus:ring-orange-500', !error);
-                phoneNumberInput.classList.toggle('focus:border-orange-500', !error);
-            });
-
-            // Customer Name Autofill listeners
-            customerNameInput.addEventListener('focus', () => customerSuggestionsList.classList.remove('hidden'));
-            customerNameInput.addEventListener('blur', () => setTimeout(() => customerSuggestionsList.classList.add('hidden'), 100));
-
-            // Vehicle Make Autofill listeners
-            vehicleMakeInput.addEventListener('focus', () => makeSuggestionsList.classList.remove('hidden'));
-            vehicleMakeInput.addEventListener('blur', () => setTimeout(() => makeSuggestionsList.classList.add('hidden'), 100));
-
-            // Vehicle Model Autofill listeners
-            vehicleModelInput.addEventListener('focus', () => modelSuggestionsList.classList.remove('hidden'));
-            vehicleModelInput.addEventListener('blur', () => setTimeout(() => modelSuggestionsList.classList.add('hidden'), 100));
-
-            // Attach spinner event listeners (delegation for buttons)
-            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner].forEach(spinner => {
-                if (spinner) {
-                    spinner.addEventListener('mousedown', handleSpinnerMouseDown);
-                    spinner.addEventListener('touchstart', handleSpinnerTouchStart);
-                    spinner.addEventListener('touchmove', handleSpinnerTouchMove);
-                    spinner.addEventListener('touchend', handleSpinnerTouchEnd);
-                    spinner.addEventListener('click', handleSpinnerButtonClick); // For button clicks inside spinner
-                }
-            });
-
-            // Form submission listener
-            dropOffForm.addEventListener('submit', (e) => {
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-
-                const rawPhoneNumber = formData.phoneNumber.replace(/\D/g, '');
-                const phoneError = validatePhoneNumber(rawPhoneNumber);
-                phoneNumberError.textContent = phoneError;
-                phoneNumberError.classList.toggle('hidden', !phoneError);
-                phoneNumberInput.classList.toggle('border-red-500', !!phoneError);
-                phoneNumberInput.classList.toggle('focus:ring-red-500', !!phoneError);
-                phoneNumberInput.classList.toggle('focus:border-red-500', !!phoneError);
-                phoneNumberInput.classList.toggle('border-gray-600', !phoneError);
-                phoneNumberInput.classList.toggle('focus:ring-orange-500', !phoneError);
-                phoneNumberInput.classList.toggle('focus:border-orange-500', !phoneError);
-
-                if (phoneError) {
-                    alert('Please fix the errors in the form before submitting.');
-                    return;
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
                 }
-
-                // Check required fields for currently visible section
-                if (formData.dropOffType === 'vehicle') {
-                    if (!formData.vehicleMake || !formData.vehicleModel || !formData.vehicleIssueDescription) {
-                        alert('Please fill in all required vehicle details.');
-                        return;
-                    }
-                } else if (formData.dropOffType === 'part') {
-                    // No specific required fields for parts beyond quantity 0 allowed
-                } else {
-                     alert('Please select what you will drop off.');
-                     return;
-                }
-
-                console.log('Form Data Submitted:', formData);
-                alert('Form submitted successfully! Check console for data.');
-                // Here you would typically send formData to a server
             });
         });
+        // --- END: Original Site Script ---
+
+
+        // --- START: Integrated Drop Off Form Script ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mock Data ---
+            const mockClients = [
+                { name: '313 Motors', phoneNumber: '' },
+                { name: '801 LA Auto', phoneNumber: '' },
+                { name: 'A And Auto Sales', phoneNumber: '' },
+                { name: 'A&A Auto Sales', phoneNumber: '' },
+                { name: 'Aaron Rimamela', phoneNumber: '' },
+                { name: 'Aaron Rimamenic', phoneNumber: '' },
+                { name: 'AC Performance', phoneNumber: '9735365722' },
+                { name: 'Ace Auto Utah', phoneNumber: '8015800538' },
+                { name: 'Ace Collision', phoneNumber: '' },
+                { name: 'Action Auto', phoneNumber: '8018824962' },
+                { name: 'Adventure Aitomotive', phoneNumber: '' },
+                { name: 'Alberto', phoneNumber: '' },
+                { name: 'Alex', phoneNumber: '' },
+                { name: 'Alex Ortiz', phoneNumber: '' },
+                { name: 'Alexis', phoneNumber: '' },
+                { name: 'Ali ToyZ', phoneNumber: '' },
+                { name: 'Amc Auto Inc', phoneNumber: '' },
+                { name: 'Andres Moronda', phoneNumber: '' },
+                { name: 'Andy', phoneNumber: '' },
+                { name: 'Anthony', phoneNumber: '' },
+                { name: 'Apex', phoneNumber: '' },
+                { name: 'Apex Motors', phoneNumber: '8014273255' },
+                { name: 'Armando Cardenas', phoneNumber: '' },
+                { name: 'Arthur', phoneNumber: '' },
+                { name: 'Arturo', phoneNumber: '' },
+                { name: 'Asays Auto', phoneNumber: '' },
+                { name: 'Assai Auto', phoneNumber: '' },
+                { name: 'Assai Auto Llc', phoneNumber: '' },
+                { name: 'Aurelio', phoneNumber: '' },
+                { name: 'Aut Deal Spot Llc', phoneNumber: '' },
+                { name: 'Auto 360', phoneNumber: '8017225954' },
+                { name: 'Auto Club', phoneNumber: '' },
+                { name: 'Auto Fit Llc', phoneNumber: '' },
+                { name: 'Auto Market', phoneNumber: '' },
+                { name: 'Auto Match', phoneNumber: '3854185323' },
+                { name: 'Auto Near Me', phoneNumber: '' },
+                { name: 'Auto Net', phoneNumber: '' },
+                { name: 'Auto Premiun', phoneNumber: '' },
+                { name: 'Auto Racing Llc', phoneNumber: '' },
+                { name: 'Automarket', phoneNumber: '' },
+                { name: 'Automax', phoneNumber: '' },
+                { name: 'Autoplace', phoneNumber: '8017351915' },
+                { name: 'Avanesyan Motors', phoneNumber: '' },
+                { name: 'Baja Auto Sales', phoneNumber: '' },
+                { name: 'Bebote', phoneNumber: '' },
+                { name: 'Beehive Auto Sale', phoneNumber: '' },
+                { name: 'Best Buy Auto', phoneNumber: '' },
+                { name: 'Beto El Mecanico', phoneNumber: '' },
+                { name: 'e Auto Sale', phoneNumber: '3853549757' },
+                { name: 'Pro Guys Auto', phoneNumber: '' },
+                { name: 'Quality Multiservice', phoneNumber: '' },
+                { name: 'Rafael Chaidez', phoneNumber: '' },
+                { name: 'Randall ', phoneNumber: '' },
+                { name: 'Raul', phoneNumber: '' },
+                { name: 'Raul Mecanico ', phoneNumber: '' },
+                { name: 'Real Automotive', phoneNumber: '' },
+                { name: 'Reality Auto', phoneNumber: '' },
+                { name: 'Red Autorebuilders Or LHM Collision', phoneNumber: '3853359812' },
+                { name: 'Red Line Auto Sale', phoneNumber: '' },
+                { name: 'Redline Auto Sale', phoneNumber: '' },
+                { name: 'RedRock Collision', phoneNumber: '' },
+                { name: 'Revanew Motor Sports', phoneNumber: '8013183351' },
+                { name: 'Revolution Auto', phoneNumber: '' },
+                { name: 'Rocky Mountain Collision', phoneNumber: '' },
+                { name: 'Rocky Mountain Diesel', phoneNumber: '' },
+                { name: 'Rokys Auto', phoneNumber: '' },
+                { name: 'Roniel Zaleta', phoneNumber: '' },
+                { name: 'Roniel Zuleta', phoneNumber: '' },
+                { name: 'Ross Jardine', phoneNumber: '' },
+                { name: 'RSG Motors', phoneNumber: '' },
+                { name: 'RVD Motors Lehi', phoneNumber: '' },
+                { name: 'S & R Auto Sales', phoneNumber: '8016916797' },
+                { name: 'S&L Automotive', phoneNumber: '8017940442' },
+                { name: 'S&R Auto', phoneNumber: '' },
+                { name: 'Saint Auto', phoneNumber: '' },
+                { name: 'Salt Lake Bumper', phoneNumber: '8012059066' },
+                { name: 'Samurai ', phoneNumber: '' },
+                { name: 'Sandpiper', phoneNumber: '' },
+                { name: 'Scott Jasper', phoneNumber: '' },
+                { name: 'Secure Auto Group', phoneNumber: '' },
+                { name: 'Select Auto', phoneNumber: '8016231369' },
+                { name: 'Sencion Performance', phoneNumber: '8016230483' },
+                { name: 'Shahbaz  Highland Motors', phoneNumber: '' },
+                { name: 'Sharkon Auto', phoneNumber: '' },
+                { name: 'Sharp Cars', phoneNumber: '8017094994' },
+                { name: 'Smart Choice', phoneNumber: '' },
+                { name: 'South Valley', phoneNumber: '' },
+                { name: 'Spectrum Auto Sales', phoneNumber: '' },
+                { name: 'Spurs Auto Sales', phoneNumber: '' },
+                { name: 'SR Prime', phoneNumber: '8014' }
+            ];
+
+            const mockVehicles = {
+                makes: ['Acura', 'Alfa Romeo', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Fiat', 'Ford', 'GMC', 'Genesis', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Lincoln', 'Maserati', 'Mazda', 'Mercedes-Benz', 'Mini', 'Mitsubishi', 'Nissan', 'Porsche', 'Ram', 'Subaru', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'],
+                models: {
+                    'Acura': ['ILX', 'TLX', 'RLX', 'RDX', 'MDX', 'NSX'],
+                    'Alfa Romeo': ['Giulia', 'Stelvio'],
+                    'Audi': ['A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'e-tron', 'TT', 'R8'],
+                    'BMW': ['2 Series', '3 Series', '4 Series', '5 Series', '7 Series', '8 Series', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'Z4', 'i3', 'i8'],
+                    'Buick': ['Encore', 'Envision', 'Enclave', 'Regal', 'LaCrosse'],
+                    'Cadillac': ['CT4', 'CT5', 'CT6', 'XT4', 'XT5', 'XT6', 'Escalade'],
+                    'Chevrolet': ['Spark', 'Sonic', 'Malibu', 'Impala', 'Camaro', 'Corvette', 'Trax', 'Equinox', 'Blazer', 'Traverse', 'Tahoe', 'Suburban', 'Colorado', 'Silverado'],
+                    'Chrysler': ['300', 'Pacifica', 'Voyager'],
+                    'Dodge': ['Charger', 'Challenger', 'Durango', 'Journey', 'Grand Caravan'],
+                    'Fiat': ['500', '500X', '500L', '124 Spider'],
+                    'Ford': ['Fiesta', 'Focus', 'Fusion', 'Mustang', 'EcoSport', 'Escape', 'Bronco', 'Bronco Sport', 'Edge', 'Explorer', 'Expedition', 'Ranger', 'F-150', 'Super Duty'],
+                    'GMC': ['Terrain', 'Acadia', 'Yukon', 'Canyon', 'Sierra'],
+                    'Genesis': ['G70', 'G80', 'G90', 'GV80'],
+                    'Honda': ['Fit', 'Civic', 'Insight', 'Accord', 'Clarity', 'HR-V', 'CR-V', 'Passport', 'Pilot', 'Odyssey', 'Ridgeline'],
+                    'Hyundai': ['Accent', 'Elantra', 'Sonata', 'Veloster', 'Kona', 'Tucson', 'Santa Fe', 'Palisade', 'Nexo', 'Ioniq'],
+                    'Infiniti': ['Q50', 'Q60', 'Q70', 'QX50', 'QX60', 'QX80'],
+                    'Jaguar': ['XE', 'XF', 'XJ', 'E-Pace', 'F-Pace', 'I-Pace', 'F-Type'],
+                    'Jeep': ['Renegade', 'Compass', 'Cherokee', 'Grand Cherokee', 'Wrangler', 'Gladiator'],
+                    'Kia': ['Rio', 'Forte', 'Optima', 'Stinger', 'Cadenza', 'K900', 'Soul', 'Seltos', 'Sportage', 'Sorento', 'Telluride', 'Sedona', 'Niro'],
+                    'Land Rover': ['Range Rover Evoque', 'Range Rover Velar', 'Range Rover Sport', 'Range Rover', 'Discovery Sport', 'Discovery', 'Defender'],
+                    'Lexus': ['IS', 'ES', 'GS', 'LS', 'UX', 'NX', 'RX', 'GX', 'LX', 'RC', 'LC'],
+                    'Lincoln': ['Corsair', 'Nautilus', 'Aviator', 'Navigator', 'MKZ', 'Continental'],
+                    'Maserati': ['Ghibli', 'Levante', 'Quattroporte', 'GranTurismo'],
+                    'Mazda': ['Mazda3', 'Mazda6', 'CX-3', 'CX-30', 'CX-5', 'CX-9', 'MX-5 Miata'],
+                    'Mercedes-Benz': ['A-Class', 'C-Class', 'E-Class', 'S-Class', 'CLA', 'CLS', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'SL', 'SLC', 'AMG GT'],
+                    'Mini': ['Hardtop', 'Clubman', 'Countryman', 'Convertible'],
+                    'Mitsubishi': ['Mirage', 'Outlander Sport', 'Outlander', 'Eclipse Cross'],
+                    'Nissan': ['Versa', 'Sentra', 'Altima', 'Maxima', 'Kicks', 'Rogue Sport', 'Rogue', 'Murano', 'Pathfinder', 'Armada', 'Frontier', 'Titan', '370Z', 'GT-R', 'Leaf'],
+                    'Porsche': ['718', '911', 'Panamera', 'Taycan', 'Macan', 'Cayenne'],
+                    'Ram': ['1500', '2500', '3500'],
+                    'Subaru': ['Impreza', 'Legacy', 'Crosstrek', 'Forester', 'Outback', 'Ascent', 'BRZ', 'WRX'],
+                    'Tesla': ['Model 3', 'Model S', 'Model X', 'Model Y'],
+                    'Toyota': ['Yaris', 'Corolla', 'Prius', 'Camry', 'Avalon', '86', 'Supra', 'C-HR', 'RAV4', 'Highlander', '4Runner', 'Sequoia', 'Land Cruiser', 'Sienna', 'Tacoma', 'Tundra'],
+                    'Volkswagen': ['Jetta', 'Passat', 'Arteon', 'Golf', 'GTI', 'Tiguan', 'Atlas', 'ID.4'],
+                    'Volvo': ['S60', 'S90', 'V60', 'V90', 'XC40', 'XC60', 'XC90']
+                }
+            };
+
+            // --- DOM Elements ---
+            const dropOffForm = document.getElementById('dropOffForm');
+            if (!dropOffForm) return; // Exit if form is not on the page
+
+            const customerNameInput = document.getElementById('customerName');
+            const customerSuggestionsList = document.getElementById('customerNameSuggestions');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const phoneNumberError = document.getElementById('phoneNumberError');
+            const dropOffTypeSelect = document.getElementById('dropOffType');
+            const vehicleDetailsDiv = document.getElementById('vehicleDetails');
+            const partDetailsDiv = document.getElementById('partDetails');
+            const vehicleYearSpinner = document.getElementById('vehicleYearSpinner');
+            const vehicleMakeInput = document.getElementById('vehicleMake');
+            const makeSuggestionsList = document.getElementById('vehicleMakeSuggestions');
+            const vehicleModelInput = document.getElementById('vehicleModel');
+            const modelSuggestionsList = document.getElementById('vehicleModelSuggestions');
+            const vehicleIssueDescriptionTextarea = document.getElementById('vehicleIssueDescription');
+            const singleStageSpinner = document.getElementById('singleStageSpinner');
+            const dualStageSpinner = document.getElementById('dualStageSpinner');
+            const threeStageSpinner = document.getElementById('threeStageSpinner');
+            const buckleSpinner = document.getElementById('buckleSpinner');
+
+            // --- Global State / Form Data ---
+            let formData = {
+                customerName: '', phoneNumber: '', dropOffType: '',
+                vehicleYear: 2020, vehicleMake: '', vehicleModel: '', vehicleIssueDescription: '',
+                singleStage: 0, dualStage: 0, threeStage: 0, buckle: 0,
+            };
+
+            // --- Helper Functions ---
+            function formatPhoneNumber(value) {
+                if (!value) return value;
+                const phoneNumber = value.replace(/\D/g, '');
+                const phoneNumberLength = phoneNumber.length;
+                if (phoneNumberLength < 4) return phoneNumber;
+                if (phoneNumberLength < 7) return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+                return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+            }
+
+            function validatePhoneNumber(number) {
+                const cleanedNumber = number.replace(/\D/g, '');
+                if (cleanedNumber.length === 0) return 'Phone number is required.';
+                if (cleanedNumber.length !== 10) return 'Phone number must be exactly 10 digits.';
+                if (!/^\d{10}$/.test(cleanedNumber)) return 'Phone number can only contain digits.';
+                return '';
+            }
+            
+            function showNotification(message, isError = false) {
+                const notification = document.getElementById('notification');
+                const notificationMessage = document.getElementById('notification-message');
+                if(!notification || !notificationMessage) return;
+
+                notificationMessage.textContent = message;
+                notification.classList.toggle('error', isError);
+                notification.classList.toggle('bg-green-500', !isError);
+                notification.classList.toggle('bg-amber-500', !isError);
+
+
+                notification.classList.add('show');
+                setTimeout(() => { notification.classList.remove('show'); }, 4000);
+            }
+
+            // --- UI Update Functions ---
+            function updateConditionalFields() {
+                const type = dropOffTypeSelect.value;
+                vehicleDetailsDiv.classList.toggle('hidden', type !== 'vehicle');
+                partDetailsDiv.classList.toggle('hidden', type !== 'part');
+                vehicleMakeInput.required = (type === 'vehicle');
+                vehicleModelInput.required = (type === 'vehicle');
+                vehicleIssueDescriptionTextarea.required = (type === 'vehicle');
+            }
+            
+            function updateSpinnerValue(spinnerElement, newValue) {
+                if(!spinnerElement) return;
+                const min = parseInt(spinnerElement.dataset.min, 10);
+                const max = parseInt(spinnerElement.dataset.max, 10);
+                const clampedValue = Math.max(min, Math.min(max, newValue));
+                spinnerElement.dataset.value = clampedValue;
+                const fieldName = spinnerElement.id.replace('Spinner', '');
+                formData[fieldName] = clampedValue;
+
+                // Rebuild content to avoid removing buttons
+                spinnerElement.innerHTML = `${clampedValue}
+                    <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                        <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                        <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                    </div>`;
+            }
+
+            function renderSuggestions(ulElement, suggestions, onClickHandler, displayKey = '') {
+                ulElement.innerHTML = '';
+                if (suggestions.length === 0) {
+                    ulElement.classList.add('hidden');
+                    return;
+                }
+                suggestions.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-600 rounded-md';
+                    li.textContent = displayKey ? item[displayKey] : item;
+                    li.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        onClickHandler(item);
+                    });
+                    ulElement.appendChild(li);
+                });
+                ulElement.classList.remove('hidden');
+            }
+
+            // --- Event Handlers ---
+            function handleInputChange(e) {
+                const { name, value } = e.target;
+                formData[name] = value;
+
+                if (name === 'phoneNumber') {
+                    const formattedValue = formatPhoneNumber(value);
+                    e.target.value = formattedValue;
+                    formData.phoneNumber = formattedValue;
+                    const error = validatePhoneNumber(value);
+                    phoneNumberError.textContent = error;
+                    phoneNumberError.classList.toggle('hidden', !error);
+                } else if (name === 'customerName') {
+                    const suggestions = value.length > 1 ? mockClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
+                    renderSuggestions(customerSuggestionsList, suggestions, handleCustomerSuggestionClick, 'name');
+                } else if (name === 'vehicleMake') {
+                    vehicleModelInput.disabled = !value;
+                    formData.vehicleModel = '';
+                    vehicleModelInput.value = '';
+                    const suggestions = value.length > 0 ? mockVehicles.makes.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
+                    renderSuggestions(makeSuggestionsList, suggestions, handleMakeSuggestionClick);
+                } else if (name === 'vehicleModel') {
+                    const availableModels = mockVehicles.models[formData.vehicleMake] || [];
+                    const suggestions = value.length > 0 ? availableModels.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
+                    renderSuggestions(modelSuggestionsList, suggestions, handleModelSuggestionClick);
+                }
+            }
+
+            function handleCustomerSuggestionClick(client) {
+                customerNameInput.value = client.name;
+                const formattedPhone = formatPhoneNumber(client.phoneNumber);
+                phoneNumberInput.value = formattedPhone;
+                formData.customerName = client.name;
+                formData.phoneNumber = formattedPhone;
+                customerSuggestionsList.classList.add('hidden');
+                phoneNumberError.classList.add('hidden');
+            }
+
+            function handleMakeSuggestionClick(make) {
+                vehicleMakeInput.value = make;
+                formData.vehicleMake = make;
+                vehicleModelInput.disabled = false;
+                vehicleModelInput.value = '';
+                formData.vehicleModel = '';
+                makeSuggestionsList.classList.add('hidden');
+                vehicleModelInput.focus();
+            }
+
+            function handleModelSuggestionClick(model) {
+                vehicleModelInput.value = model;
+                formData.vehicleModel = model;
+                modelSuggestionsList.classList.add('hidden');
+            }
+            
+            // --- Quantity Spinner Logic ---
+            let isDragging = false, startY = 0, startValue = 0, currentSpinner = null;
+            function handleSpinnerInteraction(e) {
+                const spinner = e.currentTarget;
+                if (e.target.tagName === 'BUTTON') { // Handle button clicks
+                    const action = e.target.dataset.action;
+                    let currentValue = parseInt(spinner.dataset.value, 10);
+                    const newValue = action === 'increment' ? currentValue + 1 : currentValue - 1;
+                    updateSpinnerValue(spinner, newValue);
+                    return;
+                }
+                
+                // Handle drag interaction
+                if (e.type === 'mousedown' || e.type === 'touchstart') {
+                    isDragging = true;
+                    startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                    startValue = parseInt(spinner.dataset.value, 10);
+                    currentSpinner = spinner;
+                    spinner.classList.add('cursor-grabbing');
+                    e.preventDefault();
+                }
+            }
+            
+            function handleSpinnerMove(e) {
+                if (!isDragging || !currentSpinner) return;
+                const currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                const diffY = startY - currentY;
+                const change = Math.floor(diffY / 15); // Sensitivity
+                updateSpinnerValue(currentSpinner, startValue + change);
+            }
+
+            function handleSpinnerEnd() {
+                if (isDragging && currentSpinner) {
+                    currentSpinner.classList.remove('cursor-grabbing');
+                }
+                isDragging = false;
+                currentSpinner = null;
+            }
+
+            // --- Event Listeners Initialization ---
+            dropOffForm.addEventListener('input', handleInputChange);
+            dropOffTypeSelect.addEventListener('change', updateConditionalFields);
+
+            // Hide suggestions on blur
+            [customerNameInput, vehicleMakeInput, vehicleModelInput].forEach(input => {
+                input.addEventListener('blur', () => setTimeout(() => {
+                    const suggestionsList = document.getElementById(input.id + 'Suggestions');
+                    if (suggestionsList) {
+                       suggestionsList.classList.add('hidden');
+                    }
+                }, 150));
+            });
+
+            // Attach spinner listeners
+            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner].forEach(spinner => {
+                if (spinner) {
+                    spinner.addEventListener('click', handleSpinnerInteraction);
+                    spinner.addEventListener('mousedown', handleSpinnerInteraction);
+                    spinner.addEventListener('touchstart', handleSpinnerInteraction, { passive: false });
+                }
+            });
+            window.addEventListener('mousemove', handleSpinnerMove);
+            window.addEventListener('touchmove', handleSpinnerMove, { passive: false });
+            window.addEventListener('mouseup', handleSpinnerEnd);
+            window.addEventListener('touchend', handleSpinnerEnd);
+            
+            // Initialize all spinners with buttons
+            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner].forEach(spinner => {
+                if(spinner) updateSpinnerValue(spinner, parseInt(spinner.dataset.value, 10));
+            });
+
+            // Form submission
+            dropOffForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const phoneError = validatePhoneNumber(formData.phoneNumber);
+                if (phoneError) {
+                    showNotification(phoneError, true);
+                    return;
+                }
+                if (formData.dropOffType === 'vehicle') {
+                    if (!formData.vehicleMake || !formData.vehicleModel || !formData.vehicleIssueDescription) {
+                        showNotification('Please fill in all required vehicle details.', true);
+                        return;
+                    }
+                } else if (!formData.dropOffType) {
+                    showNotification('Please select what you will drop off.', true);
+                    return;
+                }
+                console.log('Form Data Submitted:', formData);
+                showNotification('Form submitted successfully! Check console for data.');
+                dropOffForm.reset();
+                // Reset spinners and state
+                [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner].forEach(spinner => {
+                    if(spinner) {
+                        const initialValue = spinner.id === 'vehicleYearSpinner' ? 2020 : 0;
+                        updateSpinnerValue(spinner, initialValue);
+                    }
+                });
+                updateConditionalFields();
+            });
+            
+            // Initial UI setup
+            updateConditionalFields();
+        });
+        // --- END: Integrated Drop Off Form Script ---
     </script>
+
 </body>
 </html>
