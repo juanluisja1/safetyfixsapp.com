@@ -35,12 +35,9 @@
             display: none; /* Chrome, Safari, Opera */
         }
 
-        /* Notification Styling */
-        #notification.show {
-            transform: translateX(0);
-        }
-        #notification.error {
-            background-color: #DC2626; /* red-600 */
+        /* Transition for form background color */
+        .form-container {
+            transition: background-color 0.5s ease;
         }
     </style>
 </head>
@@ -173,8 +170,9 @@
         <!-- Drop Off Form Section -->
         <section id="dropoff" class="py-12 md:py-20 bg-gray-900">
             <div class="container mx-auto px-4 sm:px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-white" >Safety Fix Form</h2>
-                <div class="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-4xl mx-auto border border-gray-700">
+                <div class="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-4xl mx-auto border border-gray-700 form-container">
+                    <h2 class="text-3xl font-bold text-center mb-4 text-white" >Safety Fix Form</h2>
+                    <p id="form-status-message" class="text-center text-green-400 mb-8 hidden"></p>
                     <form id="dropOffForm" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Shop Name with Autofill -->
@@ -270,11 +268,6 @@
             <p>&copy; 2025 SafetyFixs. All Rights Reserved.</p>
         </div>
     </footer>
-
-    <!-- Notification Element -->
-    <div id="notification" class="fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 ease-in-out">
-        <p id="notification-message"></p>
-    </div>
 
     <script>
         // --- START: Original Site Script ---
@@ -389,12 +382,29 @@
             }
             
             function showNotification(message, isError = false) {
-                const notification = document.getElementById('notification');
-                const notificationMessage = document.getElementById('notification-message');
-                if(!notification || !notificationMessage) return;
-                notificationMessage.textContent = message;
-                notification.className = `fixed top-5 right-5 text-white py-3 px-5 rounded-lg shadow-lg transform transition-transform duration-500 ease-in-out show ${isError ? 'bg-red-600' : 'bg-green-500'}`;
-                setTimeout(() => { notification.classList.remove('show'); }, 4000);
+                const formContainer = dropOffForm.parentElement;
+                const formStatusMessage = document.getElementById('form-status-message');
+                if (!formContainer || !formStatusMessage) return;
+
+                // Clear previous states
+                formContainer.classList.remove('bg-green-900', 'bg-red-900');
+                formStatusMessage.classList.remove('text-green-400', 'text-red-400');
+                
+                if (isError) {
+                    formContainer.classList.add('bg-red-900');
+                    formStatusMessage.classList.add('text-red-400');
+                } else {
+                    formContainer.classList.add('bg-green-900');
+                    formStatusMessage.classList.add('text-green-400');
+                }
+
+                formStatusMessage.textContent = message;
+                formStatusMessage.classList.remove('hidden');
+
+                setTimeout(() => {
+                    formContainer.classList.remove('bg-green-900', 'bg-red-900');
+                    formStatusMessage.classList.add('hidden');
+                }, 4000);
             }
             
             function updateSpinnerValue(spinnerElement, newValue) {
