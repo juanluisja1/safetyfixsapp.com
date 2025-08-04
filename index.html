@@ -180,13 +180,13 @@
                             <!-- Shop Name with Autofill -->
                             <div class="relative">
                                 <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">Shop Name</label>
-                                <input type="text" id="customerName" name="entry.1009316933" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required autocomplete="off" />
+                                <input type="text" id="customerName" name="customerName" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required autocomplete="off" />
                                 <ul id="customerNameSuggestions" class="absolute z-20 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
                             </div>
                              <!-- Phone # -->
                             <div>
                                 <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">Phone #</label>
-                                <input type="tel" id="phoneNumber" name="entry.1143743585" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required placeholder="e.g., 801-123-4567" maxlength="12" />
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" required placeholder="e.g., 801-123-4567" maxlength="12" />
                                 <p id="phoneNumberError" class="mt-1 text-sm text-red-400 hidden"></p>
                             </div>
                         </div>
@@ -211,18 +211,18 @@
                                 </div>
                                 <div class="relative">
                                     <label for="vehicleMake" class="block text-sm font-medium text-gray-300 mb-1">Make</label>
-                                    <input type="text" id="vehicleMake" name="entry.1114223443" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Honda" autocomplete="off" />
+                                    <input type="text" id="vehicleMake" name="vehicleMake" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Honda" autocomplete="off" />
                                     <ul id="vehicleMakeSuggestions" class="absolute z-20 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
                                 </div>
                                 <div class="relative">
                                     <label for="vehicleModel" class="block text-sm font-medium text-gray-300 mb-1">Model</label>
-                                    <input type="text" id="vehicleModel" name="entry.1124913361" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Civic" autocomplete="off" disabled />
+                                    <input type="text" id="vehicleModel" name="vehicleModel" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200" placeholder="e.g., Civic" autocomplete="off" disabled />
                                     <ul id="vehicleModelSuggestions" class="absolute z-20 w-full bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg hidden"></ul>
                                 </div>
                             </div>
                             <div class="sm:col-span-2 md:col-span-3">
                                 <label for="additionalNotes" class="block text-sm font-medium text-gray-300 mb-1">Additional Notes</label>
-                                <textarea id="additionalNotes" name="entry.1343775958" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"></textarea>
+                                <textarea id="additionalNotes" name="additionalNotes" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm bg-gray-700 text-gray-200"></textarea>
                             </div>
                         </div>
 
@@ -438,21 +438,21 @@
             // --- Event Handlers ---
             function handleInputChange(e) {
                 const { name, value } = e.target;
-                if (name === 'entry.1143743585') { // Phone Number
+                if (name === 'phoneNumber') { // Using name attribute for the backend
                     const formattedValue = formatPhoneNumber(value);
                     e.target.value = formattedValue;
                     const error = validatePhoneNumber(value);
                     phoneNumberError.textContent = error;
                     phoneNumberError.classList.toggle('hidden', !!error);
-                } else if (name === 'entry.1009316933') { // Shop Name
+                } else if (name === 'customerName') { // Using name attribute for the backend
                     const suggestions = value.length > 1 ? mockClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
                     renderSuggestions(customerSuggestionsList, suggestions, handleCustomerSuggestionClick, 'name');
-                } else if (name === 'entry.1114223443') { // Vehicle Make
+                } else if (name === 'vehicleMake') { // Using name attribute for the backend
                     vehicleModelInput.disabled = !value;
                     vehicleModelInput.value = '';
                     const suggestions = value.length > 0 ? mockVehicles.makes.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
                     renderSuggestions(makeSuggestionsList, suggestions, handleMakeSuggestionClick);
-                } else if (name === 'entry.1124913361') { // Vehicle Model
+                } else if (name === 'vehicleModel') { // Using name attribute for the backend
                     const availableModels = mockVehicles.models[vehicleMakeInput.value] || [];
                     const suggestions = value.length > 0 ? availableModels.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
                     renderSuggestions(modelSuggestionsList, suggestions, handleModelSuggestionClick);
@@ -541,25 +541,32 @@
                 if(spinner) updateSpinnerValue(spinner, parseInt(spinner.dataset.value, 10));
             });
 
-            dropOffForm.addEventListener('submit', (e) => {
+            dropOffForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfDOZ3gXPzcBxrNa_9_WNgy3EB-2V4svgWfoLWWLh-DkZ1ssA/formResponse';
                 const formData = new FormData(dropOffForm);
+                const data = Object.fromEntries(formData.entries());
 
-                // Manually append spinner data with correct entry IDs
-                formData.append('entry.1065383344', vehicleYearSpinner.dataset.value);
-                formData.append('entry.1475765543', singleStageSpinner.dataset.value);
-                formData.append('entry.1189423617', dualStageSpinner.dataset.value);
-                formData.append('entry.1702394639', threeStageSpinner.dataset.value);
-                formData.append('entry.1654254427', buckleSpinner.dataset.value);
-                formData.append('entry.1994195156', moduleSpinner.dataset.value);
+                data.vehicleYear = vehicleYearSpinner.dataset.value;
+                data.moduleCount = moduleSpinner.dataset.value;
+                data.singleStageCount = singleStageSpinner.dataset.value;
+                data.dualStageCount = dualStageSpinner.dataset.value;
+                data.threeStageCount = threeStageSpinner.dataset.value;
+                data.buckleCount = buckleSpinner.dataset.value;
 
-                fetch(googleFormUrl, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors' // Important to avoid CORS errors
-                }).then(() => {
+                try {
+                    const response = await fetch('/api/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
                     showNotification('Form submitted successfully!');
                     dropOffForm.reset();
                     updateConditionalFields();
@@ -569,10 +576,11 @@
                             updateSpinnerValue(spinner, initialValue);
                         }
                     });
-                }).catch(error => {
+
+                } catch (error) {
                     console.error('Error submitting form:', error);
                     showNotification('Error submitting form. Please try again.', true);
-                });
+                }
             });
             
             updateConditionalFields();
