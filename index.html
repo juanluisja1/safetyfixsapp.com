@@ -271,68 +271,68 @@
     </footer>
 
     <script>
-        // --- START: Original Site Script ---
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+    // --- START: Original Site Script ---
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
 
-        // Initialize Swiper for services slider
-        var servicesSwiper = new Swiper('.services-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            loop: true,
-            pagination: {
-                el: '.services-swiper .swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.services-swiper .swiper-button-next',
-                prevEl: '.services-swiper .swiper-button-prev',
-            },
-            breakpoints: {
-                768: { slidesPerView: 2, spaceBetween: 40 },
-                1024: { slidesPerView: 3, spaceBetween: 50 }
+    // Initialize Swiper for services slider
+    var servicesSwiper = new Swiper('.services-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        pagination: {
+            el: '.services-swiper .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.services-swiper .swiper-button-next',
+            prevEl: '.services-swiper .swiper-button-prev',
+        },
+        breakpoints: {
+            768: { slidesPerView: 2, spaceBetween: 40 },
+            1024: { slidesPerView: 3, spaceBetween: 50 }
+        }
+    });
+    
+    // Initialize Swiper for hero slider
+    var heroSwiper = new Swiper('.hero-swiper', {
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        effect: 'fade',
+        navigation: {
+            nextEl: '.hero-swiper .swiper-button-next',
+            prevEl: '.hero-swiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '.hero-swiper .swiper-pagination',
+            clickable: true,
+        },
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(this.getAttribute('href'));
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
             }
         });
+    });
+    // --- END: Original Site Script ---
+
+
+    // --- START: Integrated Drop Off Form Script ---
+    document.addEventListener('DOMContentLoaded', () => {
         
-        // Initialize Swiper for hero slider
-        var heroSwiper = new Swiper('.hero-swiper', {
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            effect: 'fade',
-            navigation: {
-                nextEl: '.hero-swiper .swiper-button-next',
-                prevEl: '.hero-swiper .swiper-button-prev',
-            },
-            pagination: {
-                el: '.hero-swiper .swiper-pagination',
-                clickable: true,
-            },
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetElement = document.querySelector(this.getAttribute('href'));
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-        // --- END: Original Site Script ---
-
-
-        // --- START: Integrated Drop Off Form Script ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            const mockClients = [
+        const mockClients = [
             { name: 'Momentum Auto Motors', phoneNumber: '8018045364' },
             { name: '313 Motors', phoneNumber: '' }, 
             { name: '801 LA Auto', phoneNumber: '' }, 
@@ -426,268 +426,270 @@
             { name: 'SR Prime', phoneNumber: '8014' }
         ];
 
-            const mockVehicles = {
+        const mockVehicles = {
+        
+            models: {
+                'Acura': ['ILX', 'TLX', 'RLX', 'RDX', 'MDX', 'NSX'], 'Alfa Romeo': ['Giulia', 'Stelvio'], 'Audi': ['A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'e-tron', 'TT', 'R8'], 'BMW': ['2 Series', '3 Series', '4 Series', '5 Series', '7 Series', '8 Series', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'Z4', 'i3', 'i8'], 'Buick': ['Encore', 'Envision', 'Enclave', 'Regal', 'LaCrosse'], 'Cadillac': ['CT4', 'CT5', 'CT6', 'XT4', 'XT5', 'XT6', 'Escalade'], 'Chevrolet': ['Spark', 'Sonic', 'Malibu', 'Impala', 'Camaro', 'Corvette', 'Trax', 'Equinox', 'Blazer', 'Traverse', 'Tahoe', 'Suburban', 'Colorado', 'Silverado'], 'Chrysler': ['300', 'Pacifica', 'Voyager'], 'Dodge': ['Charger', 'Challenger', 'Durango', 'Journey', 'Grand Caravan'], 'Fiat': ['500', '500X', '500L', '124 Spider'], 'Ford': ['Fiesta', 'Focus', 'Fusion', 'Mustang', 'EcoSport', 'Escape', 'Bronco', 'Bronco Sport', 'Edge', 'Explorer', 'Expedition', 'Ranger', 'F-150', 'Super Duty'], 'GMC': ['Terrain', 'Acadia', 'Yukon', 'Canyon', 'Sierra'], 'Genesis': ['G70', 'G80', 'G90', 'GV80'], 'Honda': ['Fit', 'Civic', 'Insight', 'Accord', 'Clarity', 'HR-V', 'CR-V', 'Passport', 'Pilot', 'Odyssey', 'Ridgeline'], 'Hyundai': ['Accent', 'Elantra', 'Sonata', 'Veloster', 'Kona', 'Tucson', 'Santa Fe', 'Palisade', 'Nexo', 'Ioniq'], 'Infiniti': ['Q50', 'Q60', 'Q70', 'QX50', 'QX60', 'QX80'], 'Jaguar': ['XE', 'XF', 'XJ', 'E-Pace', 'F-Pace', 'I-Pace', 'F-Type'], 'Jeep': ['Renegade', 'Compass', 'Cherokee', 'Grand Cherokee', 'Wrangler', 'Gladiator'], 'Kia': ['Rio', 'Forte', 'Optima', 'Stinger', 'Cadenza', 'K900', 'Soul', 'Seltos', 'Sportage', 'Sorento', 'Telluride', 'Sedona', 'Niro'], 'Land Rover': ['Range Rover Evoque', 'Range Rover Velar', 'Range Rover Sport', 'Range Rover', 'Discovery Sport', 'Discovery', 'Defender'], 'Lexus': ['IS', 'ES', 'GS', 'LS', 'UX', 'NX', 'RX', 'GX', 'LX', 'RC', 'LC'], 'Lincoln': ['Corsair', 'Nautilus', 'Aviator', 'Navigator', 'MKZ', 'Continental'], 'Maserati': ['Ghibli', 'Levante', 'Quattroporte', 'GranTurismo'], 'Mazda': ['Mazda3', 'Mazda6', 'CX-3', 'CX-30', 'CX-5', 'CX-9', 'MX-5 Miata'], 'Mercedes-Benz': ['A-Class', 'C-Class', 'E-Class', 'S-Class', 'CLA', 'CLS', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'SL', 'SLC', 'AMG GT'], 'Mini': ['Hardtop', 'Clubman', 'Countryman', 'Convertible'], 'Mitsubishi': ['Mirage', 'Outlander Sport', 'Outlander', 'Eclipse Cross'], 'Nissan': ['Versa', 'Sentra', 'Altima', 'Maxima', 'Kicks', 'Rogue Sport', 'Rogue', 'Murano', 'Pathfinder', 'Armada', 'Frontier', 'Titan', '370Z', 'GT-R', 'Leaf'], 'Porsche': ['718', '911', 'Panamera', 'Taycan', 'Macan', 'Cayenne'], 'Ram': ['1500', '2500', '3500'], 'Subaru': ['Impreza', 'Legacy', 'Crosstrek', 'Forester', 'Outback', 'Ascent', 'BRZ', 'WRX'], 'Tesla': ['Model 3', 'Model S', 'Model X', 'Model Y'], 'Toyota': ['Yaris', 'Corolla', 'Prius', 'Camry', 'Avalon', '86', 'Supra', 'C-HR', 'RAV4', 'Highlander', '4Runner', 'Sequoia', 'Land Cruiser', 'Sienna', 'Tacoma', 'Tundra', 'Cross'], 'Volkswagen': ['Jetta', 'Passat', 'Arteon', 'Golf', 'GTI', 'Tiguan', 'Atlas', 'ID.4'], 'Volvo': ['S60', 'S90', 'V60', 'V90', 'XC40', 'XC60', 'XC90']
+            }
+        };
+
+        // --- DOM Elements ---
+        const dropOffForm = document.getElementById('dropOffForm');
+        if (!dropOffForm) return;
+
+        const customerNameInput = document.getElementById('customerName');
+        const customerSuggestionsList = document.getElementById('customerNameSuggestions');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const phoneNumberError = document.getElementById('phoneNumberError');
+        const dropOffTypeSelect = document.getElementById('dropOffType');
+        const vehicleDetailsDiv = document.getElementById('vehicleDetails');
+        const partDetailsDiv = document.getElementById('partDetails');
+        const vehicleYearSpinner = document.getElementById('vehicleYearSpinner');
+        const vehicleMakeInput = document.getElementById('vehicleMake');
+        const makeSuggestionsList = document.getElementById('vehicleMakeSuggestions');
+        const vehicleModelInput = document.getElementById('vehicleModel');
+        const modelSuggestionsList = document.getElementById('vehicleModelSuggestions');
+        const singleStageSpinner = document.getElementById('singleStageSpinner');
+        const dualStageSpinner = document.getElementById('dualStageSpinner');
+        const threeStageSpinner = document.getElementById('threeStageSpinner');
+        const buckleSpinner = document.getElementById('buckleSpinner');
+        const moduleSpinner = document.getElementById('moduleSpinner');
+
+        // --- Helper Functions ---
+        function formatPhoneNumber(value) {
+            if (!value) return value;
+            const phoneNumber = value.replace(/\D/g, '');
+            if (phoneNumber.length > 10) phoneNumber = phoneNumber.slice(0, 10);
+            const phoneNumberLength = phoneNumber.length;
+            if (phoneNumberLength < 4) return phoneNumber;
+            if (phoneNumberLength < 7) return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+            return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+        }
+
+        function validatePhoneNumber(number) {
+            const cleanedNumber = number.replace(/\D/g, '');
+            if (cleanedNumber.length > 0 && cleanedNumber.length !== 10) return 'Phone number must be 10 digits.';
+            return '';
+        }
+        
+        function showNotification(message, isError = false) {
+            const formContainer = dropOffForm.parentElement;
+            const formStatusMessage = document.getElementById('form-status-message');
+            if (!formContainer || !formStatusMessage) return;
+
+            // Clear previous states
+            formContainer.classList.remove('bg-green-900', 'bg-red-900');
+            formStatusMessage.classList.remove('text-green-400', 'text-red-400');
             
-                models: {
-                    'Acura': ['ILX', 'TLX', 'RLX', 'RDX', 'MDX', 'NSX'], 'Alfa Romeo': ['Giulia', 'Stelvio'], 'Audi': ['A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'e-tron', 'TT', 'R8'], 'BMW': ['2 Series', '3 Series', '4 Series', '5 Series', '7 Series', '8 Series', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'Z4', 'i3', 'i8'], 'Buick': ['Encore', 'Envision', 'Enclave', 'Regal', 'LaCrosse'], 'Cadillac': ['CT4', 'CT5', 'CT6', 'XT4', 'XT5', 'XT6', 'Escalade'], 'Chevrolet': ['Spark', 'Sonic', 'Malibu', 'Impala', 'Camaro', 'Corvette', 'Trax', 'Equinox', 'Blazer', 'Traverse', 'Tahoe', 'Suburban', 'Colorado', 'Silverado'], 'Chrysler': ['300', 'Pacifica', 'Voyager'], 'Dodge': ['Charger', 'Challenger', 'Durango', 'Journey', 'Grand Caravan'], 'Fiat': ['500', '500X', '500L', '124 Spider'], 'Ford': ['Fiesta', 'Focus', 'Fusion', 'Mustang', 'EcoSport', 'Escape', 'Bronco', 'Bronco Sport', 'Edge', 'Explorer', 'Expedition', 'Ranger', 'F-150', 'Super Duty'], 'GMC': ['Terrain', 'Acadia', 'Yukon', 'Canyon', 'Sierra'], 'Genesis': ['G70', 'G80', 'G90', 'GV80'], 'Honda': ['Fit', 'Civic', 'Insight', 'Accord', 'Clarity', 'HR-V', 'CR-V', 'Passport', 'Pilot', 'Odyssey', 'Ridgeline'], 'Hyundai': ['Accent', 'Elantra', 'Sonata', 'Veloster', 'Kona', 'Tucson', 'Santa Fe', 'Palisade', 'Nexo', 'Ioniq'], 'Infiniti': ['Q50', 'Q60', 'Q70', 'QX50', 'QX60', 'QX80'], 'Jaguar': ['XE', 'XF', 'XJ', 'E-Pace', 'F-Pace', 'I-Pace', 'F-Type'], 'Jeep': ['Renegade', 'Compass', 'Cherokee', 'Grand Cherokee', 'Wrangler', 'Gladiator'], 'Kia': ['Rio', 'Forte', 'Optima', 'Stinger', 'Cadenza', 'K900', 'Soul', 'Seltos', 'Sportage', 'Sorento', 'Telluride', 'Sedona', 'Niro'], 'Land Rover': ['Range Rover Evoque', 'Range Rover Velar', 'Range Rover Sport', 'Range Rover', 'Discovery Sport', 'Discovery', 'Defender'], 'Lexus': ['IS', 'ES', 'GS', 'LS', 'UX', 'NX', 'RX', 'GX', 'LX', 'RC', 'LC'], 'Lincoln': ['Corsair', 'Nautilus', 'Aviator', 'Navigator', 'MKZ', 'Continental'], 'Maserati': ['Ghibli', 'Levante', 'Quattroporte', 'GranTurismo'], 'Mazda': ['Mazda3', 'Mazda6', 'CX-3', 'CX-30', 'CX-5', 'CX-9', 'MX-5 Miata'], 'Mercedes-Benz': ['A-Class', 'C-Class', 'E-Class', 'S-Class', 'CLA', 'CLS', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'SL', 'SLC', 'AMG GT'], 'Mini': ['Hardtop', 'Clubman', 'Countryman', 'Convertible'], 'Mitsubishi': ['Mirage', 'Outlander Sport', 'Outlander', 'Eclipse Cross'], 'Nissan': ['Versa', 'Sentra', 'Altima', 'Maxima', 'Kicks', 'Rogue Sport', 'Rogue', 'Murano', 'Pathfinder', 'Armada', 'Frontier', 'Titan', '370Z', 'GT-R', 'Leaf'], 'Porsche': ['718', '911', 'Panamera', 'Taycan', 'Macan', 'Cayenne'], 'Ram': ['1500', '2500', '3500'], 'Subaru': ['Impreza', 'Legacy', 'Crosstrek', 'Forester', 'Outback', 'Ascent', 'BRZ', 'WRX'], 'Tesla': ['Model 3', 'Model S', 'Model X', 'Model Y'], 'Toyota': ['Yaris', 'Corolla', 'Prius', 'Camry', 'Avalon', '86', 'Supra', 'C-HR', 'RAV4', 'Highlander', '4Runner', 'Sequoia', 'Land Cruiser', 'Sienna', 'Tacoma', 'Tundra', 'Cross'], 'Volkswagen': ['Jetta', 'Passat', 'Arteon', 'Golf', 'GTI', 'Tiguan', 'Atlas', 'ID.4'], 'Volvo': ['S60', 'S90', 'V60', 'V90', 'XC40', 'XC60', 'XC90']
-                }
-            };
-
-            // --- DOM Elements ---
-            const dropOffForm = document.getElementById('dropOffForm');
-            if (!dropOffForm) return;
-
-            const customerNameInput = document.getElementById('customerName');
-            const customerSuggestionsList = document.getElementById('customerNameSuggestions');
-            const phoneNumberInput = document.getElementById('phoneNumber');
-            const phoneNumberError = document.getElementById('phoneNumberError');
-            const dropOffTypeSelect = document.getElementById('dropOffType');
-            const vehicleDetailsDiv = document.getElementById('vehicleDetails');
-            const partDetailsDiv = document.getElementById('partDetails');
-            const vehicleYearSpinner = document.getElementById('vehicleYearSpinner');
-            const vehicleMakeInput = document.getElementById('vehicleMake');
-            const makeSuggestionsList = document.getElementById('vehicleMakeSuggestions');
-            const vehicleModelInput = document.getElementById('vehicleModel');
-            const modelSuggestionsList = document.getElementById('vehicleModelSuggestions');
-            const singleStageSpinner = document.getElementById('singleStageSpinner');
-            const dualStageSpinner = document.getElementById('dualStageSpinner');
-            const threeStageSpinner = document.getElementById('threeStageSpinner');
-            const buckleSpinner = document.getElementById('buckleSpinner');
-            const moduleSpinner = document.getElementById('moduleSpinner');
-
-            // --- Helper Functions ---
-            function formatPhoneNumber(value) {
-                if (!value) return value;
-                const phoneNumber = value.replace(/\D/g, '');
-                if (phoneNumber.length > 10) phoneNumber = phoneNumber.slice(0, 10);
-                const phoneNumberLength = phoneNumber.length;
-                if (phoneNumberLength < 4) return phoneNumber;
-                if (phoneNumberLength < 7) return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
-                return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+            if (isError) {
+                formContainer.classList.add('bg-red-900');
+                formStatusMessage.classList.add('text-red-400');
+            } else {
+                formContainer.classList.add('bg-green-900');
+                formStatusMessage.classList.add('text-green-400');
             }
 
-            function validatePhoneNumber(number) {
-                const cleanedNumber = number.replace(/\D/g, '');
-                if (cleanedNumber.length > 0 && cleanedNumber.length !== 10) return 'Phone number must be 10 digits.';
-                return '';
-            }
-            
-            function showNotification(message, isError = false) {
-                const formContainer = dropOffForm.parentElement;
-                const formStatusMessage = document.getElementById('form-status-message');
-                if (!formContainer || !formStatusMessage) return;
+            formStatusMessage.textContent = message;
+            formStatusMessage.classList.remove('hidden');
 
-                // Clear previous states
+            setTimeout(() => {
                 formContainer.classList.remove('bg-green-900', 'bg-red-900');
-                formStatusMessage.classList.remove('text-green-400', 'text-red-400');
-                
-                if (isError) {
-                    formContainer.classList.add('bg-red-900');
-                    formStatusMessage.classList.add('text-red-400');
-                } else {
-                    formContainer.classList.add('bg-green-900');
-                    formStatusMessage.classList.add('text-green-400');
-                }
+                formStatusMessage.classList.add('hidden');
+            }, 4000);
+        }
+        
+        function updateSpinnerValue(spinnerElement, newValue) {
+            if(!spinnerElement) return;
+            const min = parseInt(spinnerElement.dataset.min, 10);
+            const max = parseInt(spinnerElement.dataset.max, 10);
+            const clampedValue = Math.max(min, Math.min(max, newValue));
+            spinnerElement.dataset.value = clampedValue;
+            spinnerElement.innerHTML = `${clampedValue}
+                <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
+                    <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
+                    <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
+                </div>`;
+        }
 
-                formStatusMessage.textContent = message;
-                formStatusMessage.classList.remove('hidden');
-
-                setTimeout(() => {
-                    formContainer.classList.remove('bg-green-900', 'bg-red-900');
-                    formStatusMessage.classList.add('hidden');
-                }, 4000);
+        function renderSuggestions(ulElement, suggestions, onClickHandler, displayKey = '') {
+            ulElement.innerHTML = '';
+            if (suggestions.length === 0) {
+                ulElement.classList.add('hidden');
+                return;
             }
-            
-            function updateSpinnerValue(spinnerElement, newValue) {
-                if(!spinnerElement) return;
-                const min = parseInt(spinnerElement.dataset.min, 10);
-                const max = parseInt(spinnerElement.dataset.max, 10);
-                const clampedValue = Math.max(min, Math.min(max, newValue));
-                spinnerElement.dataset.value = clampedValue;
-                spinnerElement.innerHTML = `${clampedValue}
-                    <div class="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col space-y-0.5">
-                        <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="increment">&#9650;</button>
-                        <button type="button" class="text-gray-400 hover:text-gray-200 text-xs leading-none" data-action="decrement">&#9660;</button>
-                    </div>`;
-            }
-
-            function renderSuggestions(ulElement, suggestions, onClickHandler, displayKey = '') {
-                ulElement.innerHTML = '';
-                if (suggestions.length === 0) {
-                    ulElement.classList.add('hidden');
-                    return;
-                }
-                suggestions.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-600 rounded-md';
-                    li.textContent = displayKey ? item[displayKey] : item;
-                    li.addEventListener('mousedown', (e) => {
-                        e.preventDefault();
-                        onClickHandler(item);
-                    });
-                    ulElement.appendChild(li);
-                });
-                ulElement.classList.remove('hidden');
-            }
-            
-            function updateConditionalFields() {
-                const type = dropOffTypeSelect.value;
-                vehicleDetailsDiv.classList.toggle('hidden', type !== 'vehicle');
-                partDetailsDiv.classList.toggle('hidden', type !== 'part');
-            }
-
-            // --- Event Handlers ---
-            function handleInputChange(e) {
-                const { name, value } = e.target;
-                if (name === 'phoneNumber') {
-                    const formattedValue = formatPhoneNumber(value);
-                    e.target.value = formattedValue;
-                    const error = validatePhoneNumber(value);
-                    phoneNumberError.textContent = error;
-                    phoneNumberError.classList.toggle('hidden', !!error);
-                } else if (name === 'customerName') {
-                    const suggestions = value.length > 1 ? mockClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
-                    renderSuggestions(customerSuggestionsList, suggestions, handleCustomerSuggestionClick, 'name');
-                } else if (name === 'vehicleMake') {
-                    vehicleModelInput.disabled = !value;
-                    vehicleModelInput.value = '';
-                    const suggestions = value.length > 0 ? mockVehicles.makes.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
-                    renderSuggestions(makeSuggestionsList, suggestions, handleMakeSuggestionClick);
-                } else if (name === 'vehicleModel') {
-                    const availableModels = mockVehicles.models[vehicleMakeInput.value] || [];
-                    const suggestions = value.length > 0 ? availableModels.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
-                    renderSuggestions(modelSuggestionsList, suggestions, handleModelSuggestionClick);
-                }
-            }
-
-            function handleCustomerSuggestionClick(client) {
-                customerNameInput.value = client.name;
-                const formattedPhone = formatPhoneNumber(client.phoneNumber);
-                phoneNumberInput.value = formattedPhone;
-                customerSuggestionsList.classList.add('hidden');
-                phoneNumberError.classList.add('hidden');
-            }
-
-            function handleMakeSuggestionClick(make) {
-                vehicleMakeInput.value = make;
-                vehicleModelInput.disabled = false;
-                vehicleModelInput.value = '';
-                makeSuggestionsList.classList.add('hidden');
-                vehicleModelInput.focus();
-            }
-
-            function handleModelSuggestionClick(model) {
-                vehicleModelInput.value = model;
-                modelSuggestionsList.classList.add('hidden');
-            }
-            
-            let isDragging = false, startY = 0, startValue = 0, currentSpinner = null;
-            function handleSpinnerInteraction(e) {
-                const spinner = e.currentTarget;
-                if (e.target.closest('button')) {
-                    const action = e.target.closest('button').dataset.action;
-                    let currentValue = parseInt(spinner.dataset.value, 10);
-                    const newValue = action === 'increment' ? currentValue + 1 : currentValue - 1;
-                    updateSpinnerValue(spinner, newValue);
-                    e.stopPropagation();
-                    return;
-                }
-                if (e.type === 'mousedown' || e.type === 'touchstart') {
-                    isDragging = true;
-                    startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-                    startValue = parseInt(spinner.dataset.value, 10);
-                    currentSpinner = spinner;
-                    spinner.classList.add('cursor-grabbing');
+            suggestions.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-600 rounded-md';
+                li.textContent = displayKey ? item[displayKey] : item;
+                li.addEventListener('mousedown', (e) => {
                     e.preventDefault();
-                }
-            }
-            
-            function handleSpinnerMove(e) {
-                if (!isDragging || !currentSpinner) return;
-                const currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-                const diffY = startY - currentY;
-                const change = Math.floor(diffY / 15);
-                updateSpinnerValue(currentSpinner, startValue + change);
-            }
-
-            function handleSpinnerEnd() {
-                if (isDragging && currentSpinner) currentSpinner.classList.remove('cursor-grabbing');
-                isDragging = false;
-                currentSpinner = null;
-            }
-
-            // --- Event Listeners Initialization ---
-            dropOffForm.addEventListener('input', handleInputChange);
-            dropOffTypeSelect.addEventListener('change', updateConditionalFields);
-
-            [customerNameInput, vehicleMakeInput, vehicleModelInput].forEach(input => {
-                input.addEventListener('blur', () => setTimeout(() => {
-                    const suggestionsList = document.getElementById(input.id + 'Suggestions');
-                    if (suggestionsList) suggestionsList.classList.add('hidden');
-                }, 150));
+                    onClickHandler(item);
+                });
+                ulElement.appendChild(li);
             });
+            ulElement.classList.remove('hidden');
+        }
+        
+        function updateConditionalFields() {
+            const type = dropOffTypeSelect.value;
+            vehicleDetailsDiv.classList.toggle('hidden', type !== 'vehicle');
+            partDetailsDiv.classList.toggle('hidden', type !== 'part');
+        }
 
-            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
-                if (spinner) {
-                    spinner.addEventListener('mousedown', handleSpinnerInteraction);
-                    spinner.addEventListener('touchstart', handleSpinnerInteraction, { passive: false });
-                }
-            });
-            window.addEventListener('mousemove', handleSpinnerMove);
-            window.addEventListener('touchmove', handleSpinnerMove, { passive: false });
-            window.addEventListener('mouseup', handleSpinnerEnd);
-            window.addEventListener('touchend', handleSpinnerEnd);
-            
-            [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
-                if(spinner) updateSpinnerValue(spinner, parseInt(spinner.dataset.value, 10));
-            });
+        // --- Event Handlers ---
+        function handleInputChange(e) {
+            const { name, value } = e.target;
+            if (name === 'phoneNumber') {
+                const formattedValue = formatPhoneNumber(value);
+                e.target.value = formattedValue;
+                const error = validatePhoneNumber(value);
+                phoneNumberError.textContent = error;
+                phoneNumberError.classList.toggle('hidden', !error);
+            } else if (name === 'customerName') {
+                const suggestions = value.length > 1 ? mockClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
+                renderSuggestions(customerSuggestionsList, suggestions, handleCustomerSuggestionClick, 'name');
+            } else if (name === 'vehicleMake') {
+                vehicleModelInput.disabled = !value;
+                vehicleModelInput.value = '';
+                // ================== FIX IS HERE ==================
+                const suggestions = value.length > 0 ? Object.keys(mockVehicles.models).filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
+                // ===============================================
+                renderSuggestions(makeSuggestionsList, suggestions, handleMakeSuggestionClick);
+            } else if (name === 'vehicleModel') {
+                const availableModels = mockVehicles.models[vehicleMakeInput.value] || [];
+                const suggestions = value.length > 0 ? availableModels.filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
+                renderSuggestions(modelSuggestionsList, suggestions, handleModelSuggestionClick);
+            }
+        }
 
-            dropOffForm.addEventListener('submit', async (e) => {
+        function handleCustomerSuggestionClick(client) {
+            customerNameInput.value = client.name;
+            const formattedPhone = formatPhoneNumber(client.phoneNumber);
+            phoneNumberInput.value = formattedPhone;
+            customerSuggestionsList.classList.add('hidden');
+            phoneNumberError.classList.add('hidden');
+        }
+
+        function handleMakeSuggestionClick(make) {
+            vehicleMakeInput.value = make;
+            vehicleModelInput.disabled = false;
+            vehicleModelInput.value = '';
+            makeSuggestionsList.classList.add('hidden');
+            vehicleModelInput.focus();
+        }
+
+        function handleModelSuggestionClick(model) {
+            vehicleModelInput.value = model;
+            modelSuggestionsList.classList.add('hidden');
+        }
+        
+        let isDragging = false, startY = 0, startValue = 0, currentSpinner = null;
+        function handleSpinnerInteraction(e) {
+            const spinner = e.currentTarget;
+            if (e.target.closest('button')) {
+                const action = e.target.closest('button').dataset.action;
+                let currentValue = parseInt(spinner.dataset.value, 10);
+                const newValue = action === 'increment' ? currentValue + 1 : currentValue - 1;
+                updateSpinnerValue(spinner, newValue);
+                e.stopPropagation();
+                return;
+            }
+            if (e.type === 'mousedown' || e.type === 'touchstart') {
+                isDragging = true;
+                startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                startValue = parseInt(spinner.dataset.value, 10);
+                currentSpinner = spinner;
+                spinner.classList.add('cursor-grabbing');
                 e.preventDefault();
-                
-                const formData = new FormData(dropOffForm);
-                const data = Object.fromEntries(formData.entries());
+            }
+        }
+        
+        function handleSpinnerMove(e) {
+            if (!isDragging || !currentSpinner) return;
+            const currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+            const diffY = startY - currentY;
+            const change = Math.floor(diffY / 15);
+            updateSpinnerValue(currentSpinner, startValue + change);
+        }
 
-                data.vehicleYear = vehicleYearSpinner.dataset.value;
-                data.moduleCount = moduleSpinner.dataset.value;
-                data.singleStageCount = singleStageSpinner.dataset.value;
-                data.dualStageCount = dualStageSpinner.dataset.value;
-                data.threeStageCount = threeStageSpinner.dataset.value;
-                data.buckleCount = buckleSpinner.dataset.value;
+        function handleSpinnerEnd() {
+            if (isDragging && currentSpinner) currentSpinner.classList.remove('cursor-grabbing');
+            isDragging = false;
+            currentSpinner = null;
+        }
 
-                try {
-                    const response = await fetch('/api/submit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    });
+        // --- Event Listeners Initialization ---
+        dropOffForm.addEventListener('input', handleInputChange);
+        dropOffTypeSelect.addEventListener('change', updateConditionalFields);
 
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    
-                    showNotification('Form submitted successfully!');
-                    dropOffForm.reset();
-                    updateConditionalFields();
-                    [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
-                        if(spinner) {
-                            const initialValue = spinner.id === 'vehicleYearSpinner' ? 2024 : 0;
-                            updateSpinnerValue(spinner, initialValue);
-                        }
-                    });
-
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                    showNotification('Error submitting form. Please try again.', true);
-                }
-            });
-            
-            updateConditionalFields();
+        [customerNameInput, vehicleMakeInput, vehicleModelInput].forEach(input => {
+            input.addEventListener('blur', () => setTimeout(() => {
+                const suggestionsList = document.getElementById(input.id + 'Suggestions');
+                if (suggestionsList) suggestionsList.classList.add('hidden');
+            }, 150));
         });
-        // --- END: Integrated Drop Off Form Script ---
-    </script>
+
+        [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
+            if (spinner) {
+                spinner.addEventListener('mousedown', handleSpinnerInteraction);
+                spinner.addEventListener('touchstart', handleSpinnerInteraction, { passive: false });
+            }
+        });
+        window.addEventListener('mousemove', handleSpinnerMove);
+        window.addEventListener('touchmove', handleSpinnerMove, { passive: false });
+        window.addEventListener('mouseup', handleSpinnerEnd);
+        window.addEventListener('touchend', handleSpinnerEnd);
+        
+        [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
+            if(spinner) updateSpinnerValue(spinner, parseInt(spinner.dataset.value, 10));
+        });
+
+        dropOffForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(dropOffForm);
+            const data = Object.fromEntries(formData.entries());
+
+            data.vehicleYear = vehicleYearSpinner.dataset.value;
+            data.moduleCount = moduleSpinner.dataset.value;
+            data.singleStageCount = singleStageSpinner.dataset.value;
+            data.dualStageCount = dualStageSpinner.dataset.value;
+            data.threeStageCount = threeStageSpinner.dataset.value;
+            data.buckleCount = buckleSpinner.dataset.value;
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                showNotification('Form submitted successfully!');
+                dropOffForm.reset();
+                updateConditionalFields();
+                [vehicleYearSpinner, singleStageSpinner, dualStageSpinner, threeStageSpinner, buckleSpinner, moduleSpinner].forEach(spinner => {
+                    if(spinner) {
+                        const initialValue = spinner.id === 'vehicleYearSpinner' ? 2024 : 0;
+                        updateSpinnerValue(spinner, initialValue);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showNotification('Error submitting form. Please try again.', true);
+            }
+        });
+        
+        updateConditionalFields();
+    });
+    // --- END: Integrated Drop Off Form Script ---
+</script>
 
 </body>
 </html>
