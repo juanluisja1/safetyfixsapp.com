@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="preload" as="image" href="./img/slide0.5.png">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -232,10 +233,10 @@
                         <div id="partDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
                             <h3 class="text-lg font-semibold text-gray-200">Part Details (Quantities)</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Module(s)</label><div id="moduleSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
-                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Single Stage</label><div id="singleStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
-                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Dual Stage</label><div id="dualStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
-                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Triple Stage</label><div id="threeStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                                <div class="flex items-center justify-between"><img class="rounded-sm" loading="lazy" src="./img/modules.webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Module(s)</label> <div id="moduleSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/Single Stage(s) .webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Single Stage</label><div id="singleStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
+                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/Dual Stage(s) .webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Dual Stage</label><div id="dualStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
+                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/3 Stage(s).jpg"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Triple Stage</label><div id="threeStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
                                 <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Buckles</label><div id="buckleSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
                             </div>
                         </div>
@@ -335,102 +336,30 @@
     // --- START: Integrated Drop Off Form Script ---
     document.addEventListener('DOMContentLoaded', () => {
         
-        const mockClients = [
-            { name: 'Momentum Auto Motors', phoneNumber: '8018045364' },
-            { name: '313 Motors', phoneNumber: '' }, 
-            { name: '801 LA Auto', phoneNumber: '' }, 
-            { name: 'A And Auto Sales', phoneNumber: '' }, 
-            { name: 'A&A Auto Sales', phoneNumber: '' }, 
-            { name: 'Aaron Rimamela', phoneNumber: '' }, 
-            { name: 'Aaron Rimamenic', phoneNumber: '' }, 
-            { name: 'AC Performance', phoneNumber: '9735365722' }, 
-            { name: 'Ace Auto Utah', phoneNumber: '8015800538' }, 
-            { name: 'Ace Collision', phoneNumber: '' }, 
-            { name: 'Action Auto', phoneNumber: '8018824962' }, 
-            { name: 'Adventure Aitomotive', phoneNumber: '' }, 
-            { name: 'Alberto', phoneNumber: '' }, 
-            { name: 'Alex', phoneNumber: '' }, 
-            { name: 'Alex Ortiz', phoneNumber: '' }, 
-            { name: 'Alexis', phoneNumber: '' }, 
-            { name: 'Ali ToyZ', phoneNumber: '' }, 
-            { name: 'Amc Auto Inc', phoneNumber: '' }, 
-            { name: 'Andres Moronda', phoneNumber: '' }, 
-            { name: 'Andy', phoneNumber: '' }, 
-            { name: 'Anthony', phoneNumber: '' }, 
-            { name: 'Apex', phoneNumber: '' }, 
-            { name: 'Apex Motors', phoneNumber: '8014273255' }, 
-            { name: 'Armando Cardenas', phoneNumber: '' }, 
-            { name: 'Arthur', phoneNumber: '' }, 
-            { name: 'Arturo', phoneNumber: '' }, 
-            { name: 'Asays Auto', phoneNumber: '' }, 
-            { name: 'Assai Auto', phoneNumber: '' }, 
-            { name: 'Assai Auto Llc', phoneNumber: '' }, 
-            { name: 'Aurelio', phoneNumber: '' }, 
-            { name: 'Aut Deal Spot Llc', phoneNumber: '' }, 
-            { name: 'Auto 360', phoneNumber: '8017225954' }, 
-            { name: 'Auto Club', phoneNumber: '' }, 
-            { name: 'Auto Fit Llc', phoneNumber: '' }, 
-            { name: 'Auto Market', phoneNumber: '' }, 
-            { name: 'Auto Match', phoneNumber: '3854185323' }, 
-            { name: 'Auto Near Me', phoneNumber: '' }, 
-            { name: 'Auto Net', phoneNumber: '' }, 
-            { name: 'Auto Premiun', phoneNumber: '' }, 
-            { name: 'Auto Racing Llc', phoneNumber: '' }, 
-            { name: 'Automarket', phoneNumber: '' }, 
-            { name: 'Automax', phoneNumber: '' }, 
-            { name: 'Autoplace', phoneNumber: '8017351915' }, 
-            { name: 'Avanesyan Motors', phoneNumber: '' }, 
-            { name: 'Baja Auto Sales', phoneNumber: '' }, 
-            { name: 'Bebote', phoneNumber: '' }, 
-            { name: 'Beehive Auto Sale', phoneNumber: '' }, 
-            { name: 'Best Buy Auto', phoneNumber: '' }, 
-            { name: 'Beto El Mecanico', phoneNumber: '' }, 
-            { name: 'e Auto Sale', phoneNumber: '3853549757' }, 
-            { name: 'Pro Guys Auto', phoneNumber: '' }, 
-            { name: 'Quality Multiservice', phoneNumber: '' }, 
-            { name: 'Rafael Chaidez', phoneNumber: '' }, 
-            { name: 'Randall ', phoneNumber: '' }, 
-            { name: 'Raul', phoneNumber: '' }, 
-            { name: 'Raul Mecanico ', phoneNumber: '' }, 
-            { name: 'Real Automotive', phoneNumber: '' }, 
-            { name: 'Reality Auto', phoneNumber: '' }, 
-            { name: 'Red Autorebuilders Or LHM Collision', phoneNumber: '3853359812' }, 
-            { name: 'Red Line Auto Sale', phoneNumber: '' }, 
-            { name: 'Redline Auto Sale', phoneNumber: '' }, 
-            { name: 'RedRock Collision', phoneNumber: '' }, 
-            { name: 'Revanew Motor Sports', phoneNumber: '8013183351' }, 
-            { name: 'Revolution Auto', phoneNumber: '' }, 
-            { name: 'Rocky Mountain Collision', phoneNumber: '' }, 
-            { name: 'Rocky Mountain Diesel', phoneNumber: '' }, 
-            { name: 'Rokys Auto', phoneNumber: '' }, 
-            { name: 'Roniel Zaleta', phoneNumber: '' }, 
-            { name: 'Roniel Zuleta', phoneNumber: '' }, 
-            { name: 'Ross Jardine', phoneNumber: '' }, 
-            { name: 'RSG Motors', phoneNumber: '' }, 
-            { name: 'RVD Motors Lehi', phoneNumber: '' }, 
-            { name: 'S & R Auto Sales', phoneNumber: '8016916797' }, 
-            { name: 'S&L Automotive', phoneNumber: '8017940442' }, 
-            { name: 'S&R Auto', phoneNumber: '' }, 
-            { name: 'Saint Auto', phoneNumber: '' }, 
-            { name: 'Salt Lake Bumper', phoneNumber: '8012059066' }, 
-            { name: 'Samurai ', phoneNumber: '' }, 
-            { name: 'Sandpiper', phoneNumber: '' }, 
-            { name: 'Scott Jasper', phoneNumber: '' }, 
-            { name: 'Secure Auto Group', phoneNumber: '' }, 
-            { name: 'Select Auto', phoneNumber: '8016231369' }, 
-            { name: 'Sencion Performance', phoneNumber: '8016230483' }, 
-            { name: 'Shahbaz Highland Motors', phoneNumber: '' }, 
-            { name: 'Sharkon Auto', phoneNumber: '' }, 
-            { name: 'Sharp Cars', phoneNumber: '8017094994' }, 
-            { name: 'Smart Choice', phoneNumber: '' }, 
-            { name: 'South Valley', phoneNumber: '' }, 
-            { name: 'Spectrum Auto Sales', phoneNumber: '' }, 
-            { name: 'Spurs Auto Sales', phoneNumber: '' }, 
-            { name: 'SR Prime', phoneNumber: '8014' }
-        ];
+        // Define the base URL for your API.
+        const API_BASE_URL = 'https://safetyfixs.com:3000';
 
-        const mockVehicles = {
+        // This variable will hold the client data fetched from the server.
+        let allClients = [];
+
+        // Fetch client data from the server when the page loads.
+        async function fetchClients() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/clients`);
+                if (!response.ok) {
+                    throw new Error('Could not fetch client data.');
+                }
+                allClients = await response.json();
+                console.log('Successfully fetched client data:', allClients);
+            } catch (error) {
+                console.error('Error fetching client data:', error);
+                // We can still proceed with an empty client list.
+                allClients = [];
+            }
+        }
         
+        // --- This is the same vehicle data from before ---
+        const mockVehicles = {
             models: {
                 'Acura': ['ILX', 'Integra', 'MDX', 'NSX', 'RDX', 'TLX'],
                 'Alfa Romeo': ['Giulia', 'Stelvio', 'Tonale'],
@@ -593,14 +522,13 @@
                 phoneNumberError.textContent = error;
                 phoneNumberError.classList.toggle('hidden', !error);
             } else if (name === 'customerName') {
-                const suggestions = value.length > 1 ? mockClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
+                // Use the fetched client list for suggestions
+                const suggestions = value.length > 1 ? allClients.filter(c => c.name.toLowerCase().includes(value.toLowerCase())) : [];
                 renderSuggestions(customerSuggestionsList, suggestions, handleCustomerSuggestionClick, 'name');
             } else if (name === 'vehicleMake') {
                 vehicleModelInput.disabled = !value;
                 vehicleModelInput.value = '';
-                // ================== FIX IS HERE ==================
                 const suggestions = value.length > 0 ? Object.keys(mockVehicles.models).filter(m => m.toLowerCase().includes(value.toLowerCase())) : [];
-                // ===============================================
                 renderSuggestions(makeSuggestionsList, suggestions, handleMakeSuggestionClick);
             } else if (name === 'vehicleModel') {
                 const availableModels = mockVehicles.models[vehicleMakeInput.value] || [];
@@ -705,7 +633,7 @@
             data.buckleCount = buckleSpinner.dataset.value;
 
             try {
-                const response = await fetch('/api/submit', {
+                const response = await fetch(`${API_BASE_URL}/api/submit`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -726,6 +654,8 @@
                         updateSpinnerValue(spinner, initialValue);
                     }
                 });
+                // After a successful submission, refresh the client list to include the new entry
+                fetchClients();
 
             } catch (error) {
                 console.error('Error submitting form:', error);
@@ -733,11 +663,12 @@
             }
         });
         
+        // Initial setup calls
         updateConditionalFields();
+        fetchClients(); // Fetch the client data when the page loads
     });
     // --- END: Integrated Drop Off Form Script ---
 </script>
 
 </body>
 </html>
-
