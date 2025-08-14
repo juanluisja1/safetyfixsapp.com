@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <link rel="preload" as="image" href="./img/slide0.5.png">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -230,14 +229,54 @@
                         </div>
 
                         <!-- Conditional Fields for Part -->
-                        <div id="partDetails" class="space-y-4 p-4 bg-gray-700 rounded-md border border-gray-600 hidden">
-                            <h3 class="text-lg font-semibold text-gray-200">Part Details (Quantities)</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                                <div class="flex items-center justify-between"><img class="rounded-sm" loading="lazy" src="./img/modules.webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Module(s)</label> <div id="moduleSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
-                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/Single Stage(s) .webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Single Stage</label><div id="singleStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
-                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/Dual Stage(s) .webp"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Dual Stage</label><div id="dualStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
-                                <div class="flex items-center justify-between" ><img class="rounded-sm" loading="lazy" src="./img/3 Stage(s).jpg"/><div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Triple Stage</label><div id="threeStageSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div></div>
-                                <div class="flex items-center justify-between"><label class="block text-sm font-medium text-gray-300">Buckles</label><div id="buckleSpinner" class="relative w-24 flex items-center justify-center px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-200 text-lg font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div></div>
+                        <div id="partDetails" class="space-y-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600 hidden">
+                            <h3 class="text-lg font-semibold text-gray-200 text-center">Part Details (Quantities)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                                
+                                <!-- Module Card -->
+                                <div class="flex flex-col items-center space-y-3 p-3 bg-gray-700 rounded-lg border border-gray-600">
+                                    <img class="rounded-md h-24 w-full object-cover" loading="lazy" src="./img/modules.webp" onerror="this.onerror=null; this.src='https://placehold.co/150x100/6B7280/FFFFFF?text=Module';">
+                                    <div class="w-full flex items-center justify-between">
+                                        <label class="block text-sm font-medium text-gray-300">Module(s)</label>
+                                        <div id="moduleSpinner" class="relative w-20 flex items-center justify-center px-2 py-1 border border-gray-500 rounded-md shadow-sm bg-gray-800 text-gray-200 text-base font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Single Stage Card -->
+                                <div class="flex flex-col items-center space-y-3 p-3 bg-gray-700 rounded-lg border border-gray-600">
+                                    <img class="rounded-md h-24 w-full object-cover" loading="lazy" src="./img/Single Stage(s) .webp" onerror="this.onerror=null; this.src='https://placehold.co/150x100/6B7280/FFFFFF?text=Single+Stage';">
+                                    <div class="w-full flex items-center justify-between">
+                                        <label class="block text-sm font-medium text-gray-300">Single</label>
+                                        <div id="singleStageSpinner" class="relative w-20 flex items-center justify-center px-2 py-1 border border-gray-500 rounded-md shadow-sm bg-gray-800 text-gray-200 text-base font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Dual Stage Card -->
+                                <div class="flex flex-col items-center space-y-3 p-3 bg-gray-700 rounded-lg border border-gray-600">
+                                    <img class="rounded-md h-24 w-full object-cover" loading="lazy" src="./img/Dual Stage(s) .webp" onerror="this.onerror=null; this.src='https://placehold.co/150x100/6B7280/FFFFFF?text=Dual+Stage';">
+                                    <div class="w-full flex items-center justify-between">
+                                        <label class="block text-sm font-medium text-gray-300">Dual</label>
+                                        <div id="dualStageSpinner" class="relative w-20 flex items-center justify-center px-2 py-1 border border-gray-500 rounded-md shadow-sm bg-gray-800 text-gray-200 text-base font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Triple Stage Card -->
+                                <div class="flex flex-col items-center space-y-3 p-3 bg-gray-700 rounded-lg border border-gray-600">
+                                    <img class="rounded-md h-24 w-full object-cover" loading="lazy" src="./img/3 Stage(s).jpg" onerror="this.onerror=null; this.src='https://placehold.co/150x100/6B7280/FFFFFF?text=Triple+Stage';">
+                                    <div class="w-full flex items-center justify-between">
+                                        <label class="block text-sm font-medium text-gray-300">Triple</label>
+                                        <div id="threeStageSpinner" class="relative w-20 flex items-center justify-center px-2 py-1 border border-gray-500 rounded-md shadow-sm bg-gray-800 text-gray-200 text-base font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Buckles Card -->
+                                <div class="flex flex-col items-center space-y-3 p-3 bg-gray-700 rounded-lg border border-gray-600">
+                                    <img class="rounded-md h-24 w-full object-cover" loading="lazy" src="https://placehold.co/150x100/6B7280/FFFFFF?text=Buckle" alt="Seatbelt Buckle">
+                                    <div class="w-full flex items-center justify-between">
+                                        <label class="block text-sm font-medium text-gray-300">Buckles</label>
+                                        <div id="buckleSpinner" class="relative w-20 flex items-center justify-center px-2 py-1 border border-gray-500 rounded-md shadow-sm bg-gray-800 text-gray-200 text-base font-semibold cursor-grab select-none quantity-spinner-container" data-value="0" data-min="0" data-max="20">0</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -337,7 +376,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         
         // Define the base URL for your API.
-        const API_BASE_URL = 'https://safetyfixs.com:3000';
+        const API_BASE_URL = 'https://safetyfixs.com';
 
         // This variable will hold the client data fetched from the server.
         let allClients = [];
